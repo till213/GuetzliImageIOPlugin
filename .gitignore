@@ -1,0 +1,40 @@
+Makefile*
+*.Debug
+*.Release
+*_resource.rc
+*.o
+*.exe
+*.qm
+*.dll
+*.so
+Doxydoc
+
+# Qt build
+ui_*.h
+qrc_*.cpp
+moc_*.cpp
+GeneratedFiles
+bin
+dist
+
+# Qt Creator
+*.pro.user*
+*.autosave
+.qmake*
+
+# Mac
+*.xcodeproj
+.DS_Store
+*.app
+*.dylib
+
+# Windows
+Thumbs.db
+
+# Installer
+*.msi
+*.wixobj
+*.wixpdb
+*.log
+
+
