@@ -14,12 +14,26 @@ Q_EXPORT_PLUGIN2(GuetzliIOPlugin, ImageIOPlugin)
 
 GuetzliImageIOPlugin::Capabilities GuetzliImageIOPlugin::capabilities(QIODevice *device, const QByteArray &format) const
 {
-    // @todo Implement me
-    return Capability::CanWrite;
+    Q_UNUSED(device)
+
+    if (format == "jpeg" || format == "jpg") {
+        return Capability::CanWrite;
+    } else {
+        return 0;
+    }
+
 }
 
 QImageIOHandler *GuetzliImageIOPlugin::create(QIODevice *device, const QByteArray &format) const
 {
-    // @todo Implement me
-    return new GuetzliImageIOHandler();
+    Q_UNUSED(device)
+    Q_UNUSED(format)
+
+    GuetzliImageIOHandler *guetzliImageIOHandler;
+
+    guetzliImageIOHandler = new GuetzliImageIOHandler();
+    guetzliImageIOHandler->setFormat("jpeg");
+
+    return guetzliImageIOHandler;
+
 }

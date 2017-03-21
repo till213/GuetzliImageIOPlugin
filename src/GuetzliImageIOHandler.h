@@ -10,8 +10,10 @@ class GuetzliImageIOHandler : public QImageIOHandler
 public:
     GuetzliImageIOHandler();
 
-    bool canRead() const override;
-    bool read(QImage *image) override;
+    virtual bool canRead() const override;
+    virtual bool read(QImage *image) override;
+    virtual bool write(const QImage &image) override;
+    virtual bool supportsOption(ImageOption option) const override;
 };
 
 #endif // GUETZLIIMAGEIOHANDLER_H
