@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 include(Sources.pri)
+include(GuetzliSources.pri)
 
 QT       += core gui
 
@@ -14,6 +15,7 @@ CONFIG += plugin c++11
 
 DESTDIR = $$[QT_INSTALL_PLUGINS]/imageformats
 
+INCLUDEPATH = $$PWD/guetzli $$PWD/guetzli/third_party/butteraugli
 
 
 unix {
