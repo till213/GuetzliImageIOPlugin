@@ -16,7 +16,7 @@ GuetzliImageIOPlugin::Capabilities GuetzliImageIOPlugin::capabilities(QIODevice 
 {
     Q_UNUSED(device)
 
-    if (format == "jpeg" || format == "jpg") {
+    if (format == "jpeg" || format == "jpg" || format == "guetzli") {
         return Capability::CanWrite;
     } else {
         return 0;
@@ -26,13 +26,13 @@ GuetzliImageIOPlugin::Capabilities GuetzliImageIOPlugin::capabilities(QIODevice 
 
 QImageIOHandler *GuetzliImageIOPlugin::create(QIODevice *device, const QByteArray &format) const
 {
-    Q_UNUSED(device)
     Q_UNUSED(format)
 
     GuetzliImageIOHandler *guetzliImageIOHandler;
 
     guetzliImageIOHandler = new GuetzliImageIOHandler();
-    guetzliImageIOHandler->setFormat("jpeg");
+    guetzliImageIOHandler->setFormat("guetzli");
+    guetzliImageIOHandler->setDevice(device);
 
     return guetzliImageIOHandler;
 

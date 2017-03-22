@@ -1,4 +1,5 @@
 #include <QImage>
+#include <QFile>
 
 #include <guetzli/processor.h>
 #include <guetzli/quality.h>
@@ -66,7 +67,9 @@ bool GuetzliImageIOHandler::write(const QImage &image)
       fprintf(stderr, "Guetzli processing failed\n");
       return false;
     }
-    return true;
+
+    // @todo Error handling
+    return this->device()->write(out_data.data(), out_data.size()) != -1;
 }
 
 bool GuetzliImageIOHandler::supportsOption(ImageOption option) const
