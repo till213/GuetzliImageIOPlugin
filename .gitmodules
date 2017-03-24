@@ -1,6 +1,3 @@
 [submodule "guetzli"]
 	path = Guetzli/guetzli
 	url = https://github.com/google/guetzli
-[submodule "Guetzli/guetzli"]
-	path = Guetzli/guetzli
-	url = https://github.com/google/guetzli.git
