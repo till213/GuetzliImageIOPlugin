@@ -1,3 +1,0 @@
-[submodule "guetzli"]
-	path = Guetzli/guetzli
-	url = https://github.com/google/guetzli
