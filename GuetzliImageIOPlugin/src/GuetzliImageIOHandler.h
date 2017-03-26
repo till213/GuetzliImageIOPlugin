@@ -8,6 +8,9 @@ class QImage;
 class GuetzliImageIOHandler : public QImageIOHandler
 {
 public:
+
+    const static int DefaultQuality;
+
     GuetzliImageIOHandler();
 
     virtual bool canRead() const override;

@@ -1,5 +1,6 @@
 #include <QImage>
 #include <QFile>
+#include <QVariant>
 
 #include <guetzli/processor.h>
 #include <guetzli/quality.h>
@@ -18,7 +19,12 @@ void fetchRGB(const QImage &image, std::vector<uint8_t> *rgb) {
 
     // @todo Treat each format (that we want to support) individually - here we go the Cheap Way(tm)
     // by making sure that the image format is RGB, 8 bit per channel
-    QImage rgbImage = image.convertToFormat(QImage::Format_RGB888);
+    QImage rgbImage;
+    if (image.format() != QImage::Format_RGB888) {
+        rgbImage = image.convertToFormat(QImage::Format_RGB888);
+    } else {
+        rgbImage = image;
+    }
 
     // RGB
     for (int y = 0; y < rgbImage.height(); ++y) {
@@ -34,6 +40,9 @@ void fetchRGB(const QImage &image, std::vector<uint8_t> *rgb) {
 } // anonymous
 
 // Public
+
+const int GuetzliImageIOHandler::DefaultQuality = 85;
+
 
 GuetzliImageIOHandler::GuetzliImageIOHandler()
 {
@@ -57,19 +66,25 @@ bool GuetzliImageIOHandler::write(const QImage &image)
     guetzli::ProcessStats stats;
     guetzli::Params params;
 
-    // @todo Use the Quality option
-    params.butteraugli_target = guetzli::ButteraugliScoreForQuality(85);
+    QVariant quality = this->option(ImageOption::Quality);
+    int qualityValue;
+    if (quality.isValid()) {
+        qualityValue = quality.toInt();
+    } else {
+        qualityValue = DefaultQuality;
+    }
+
+    params.butteraugli_target = guetzli::ButteraugliScoreForQuality(qualityValue);
 
     ::fetchRGB(image, &rgb);
 
-    std::string out_data;
-    if (!guetzli::Process(params, &stats, rgb, image.width(), image.height(), &out_data)) {
+    std::string outData;
+    if (!guetzli::Process(params, &stats, rgb, image.width(), image.height(), &outData)) {
       fprintf(stderr, "Guetzli processing failed\n");
       return false;
     }
 
-    // @todo Error handling
-    return this->device()->write(out_data.data(), out_data.size()) != -1;
+    return this->device()->write(outData.data(), outData.size()) != -1;
 }
 
 bool GuetzliImageIOHandler::supportsOption(ImageOption option) const

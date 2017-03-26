@@ -1,5 +1,5 @@
 {
-    "Keys": [ "jpg", "jpeg", "guetzli" ],
-    "MimeTypes": [ "image/jpeg", "image/jpeg", "image/jpeg" ]
+    "Keys": [ "guetzli" ],
+    "MimeTypes": [ "image/jpeg" ]
 }
 
