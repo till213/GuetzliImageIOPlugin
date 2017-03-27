@@ -30,7 +30,7 @@ CONFIG(debug, debug|release) {
 }
 
 CONFIG(debug, debug|release) {
-    LIBS += -L$$PWD/../bin/debug -lGuetzli
+    LIBS += -L$$PWD/../bin/debug -lGuetzliLib
 } else {
     LIBS += -L$$PWD/../bin/release -lGuetzli
 }

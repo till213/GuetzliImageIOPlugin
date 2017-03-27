@@ -1,5 +1,6 @@
 include(Sources.pri)
 
+TARGET = GuetzliLib
 TEMPLATE = lib
 CONFIG += staticlib
 
