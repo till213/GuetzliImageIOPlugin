@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
-SUBDIRS = GuetzliLib GuetzliImageIOPlugin GuetzliSimpleGUI # Guetzli
+SUBDIRS = GuetzliLib GuetzliImageIOPlugin GuetzliSimpleGUI #Guetzli
 
 GuetzliLib.subdir = GuetzliLib
 
