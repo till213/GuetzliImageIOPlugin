@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
-SUBDIRS = GuetzliLib GuetzliImageIOPlugin GuetzliSimpleGUI Guetzli
+SUBDIRS = GuetzliLib GuetzliImageIOPlugin GuetzliSimpleGUI # Guetzli
 
 GuetzliLib.subdir = GuetzliLib
 
@@ -9,5 +9,6 @@ GuetzliImageIOPlugin.depends = GuetzliLib
 GuetzliSimpleGUI.subdir = GuetzliSimpleGUI
 GuetzliSimpleGUI.depends = GuetzliLib GuetzliImageIOPlugin
 
-Guetzli.subdir = Guetzli
-Guetzli.depends = GuetzliLib
+# Define PNG dependency first
+#Guetzli.subdir = Guetzli
+#Guetzli.depends = GuetzliLib

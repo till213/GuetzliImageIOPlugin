@@ -15,7 +15,7 @@ CONFIG += plugin c++11
 
 DESTDIR = $$[QT_INSTALL_PLUGINS]/imageformats
 
-INCLUDEPATH = $$PWD/../GuetzliLib/guetzli/guetzli $$PWD/../GuetzliLib/guetzli/third_party/butteraugli
+INCLUDEPATH = $$PWD/../GuetzliLib/guetzli $$PWD/../GuetzliLib/guetzli/third_party/butteraugli
 
 CONFIG(debug, debug|release) {
     OBJECTS_DIR    = obj/debug

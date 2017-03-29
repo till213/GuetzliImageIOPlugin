@@ -13,5 +13,6 @@ TEMPLATE = app
 
 INCLUDEPATH = $$PWD/../GuetzliLib/guetzli/guetzli $$PWD/../GuetzliLib/guetzli/third_party/butteraugli
 
+
 CONFIG += link_pkgconfig
 PKGCONFIG += png
