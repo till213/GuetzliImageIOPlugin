@@ -13,16 +13,15 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    virtual ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
     QString m_filePath;
 
-private slots:
-
-    void on_openAction_triggered();
-    void on_saveAsAction_triggered();
+public  slots:
+    void openImage();
+    void saveImage();
 };
 
 #endif // MAINWINDOW_H

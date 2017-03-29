@@ -18,14 +18,16 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_openAction_triggered()
+// Private Slots
+
+void MainWindow::openImage()
 {
     qDebug("Open Action");
     m_filePath = QFileDialog::getOpenFileName(this, tr("Open"), m_filePath);
-    ui->m_filePathLineEdit->setText(m_filePath);
+    this->setWindowTitle(m_filePath);
 }
 
-void MainWindow::on_saveAsAction_triggered()
+void MainWindow::saveImage()
 {
     QList<QByteArray> supportedImageFormats = QImageWriter::supportedImageFormats();
 
@@ -49,3 +51,4 @@ void MainWindow::on_saveAsAction_triggered()
     }
 
 }
+
