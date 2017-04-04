@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QString>
+#include <QByteArray>
 
 class QImage;
 class QWidget;
@@ -21,8 +22,12 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QString m_filePath;
+    QString m_sourceFilePath;
+    QByteArray m_sourceFormat;
+    float m_sourceGamma;
+    QString m_targetFilePath;
     QImage *m_image;
+    qint64 m_elapsed;
 
     void updateUi();
 
