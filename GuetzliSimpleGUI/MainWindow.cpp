@@ -3,6 +3,7 @@
 #include <QImage>
 #include <QPixmap>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QStandardPaths>
 #include <QElapsedTimer>
 
@@ -18,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_image = new QImage();
     QStringList standardLocations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
     if (standardLocations.size() > 0) {
-        m_sourceFilePath = standardLocations[0];
+        m_lastSourceDirectory = standardLocations[0];
     }
     updateUi();
 }
@@ -42,8 +43,10 @@ void MainWindow::updateUi()
     if (!m_sourceFilePath.isEmpty() && sourceFile.exists()) {
         qint64 size = sourceFile.size();
         ui->sourceSizeLabel->setText(QString("%1").arg(size / 1024));
+        this->setWindowTitle(QFileInfo(m_sourceFilePath).fileName());
     } else {
         ui->sourceSizeLabel->setText(QString());
+        this->setWindowTitle(QString("Guetzli Simple GUI"));
     }
     if (!m_image->isNull()) {
         ui->sourceFormatLabel->setText(QString(m_sourceFormat));
@@ -75,10 +78,10 @@ void MainWindow::updateUi()
 void MainWindow::openImage()
 {
     QString filter("Images (*.png *.tif *.tiff *.jpg *.jpeg);;PNG (*.png);;TIFF (*.tif *.tiff);; JPEG (*.jpg *.jpeg)");
-    m_sourceFilePath = QFileDialog::getOpenFileName(this, tr("Open"), m_sourceFilePath, filter);
-    this->setWindowTitle(m_sourceFilePath);
+    m_sourceFilePath = QFileDialog::getOpenFileName(this, tr("Open"), m_lastSourceDirectory, filter);
     if (!m_sourceFilePath.isNull()) {
 
+        m_lastSourceDirectory = QFileInfo(m_sourceFilePath).absolutePath();
         QImageReader reader(m_sourceFilePath);
         m_sourceFormat = reader.format();
         *m_image = reader.read();
@@ -110,7 +113,11 @@ void MainWindow::saveImage()
 {
     QElapsedTimer elapsedTimer;
     if (!m_image->isNull()) {
-        m_targetFilePath = QFileDialog::getSaveFileName(this, tr("Save"), m_targetFilePath);
+        QString filter("Guetzli (*.jpg)");
+        if (!m_targetFilePath.isEmpty()) {
+            m_targetFilePath = m_lastSourceDirectory;
+        }
+        m_targetFilePath = QFileDialog::getSaveFileName(this, tr("Save"), m_targetFilePath, filter);
         if (!m_targetFilePath.isNull()) {
             QImageWriter imageWriter;
             imageWriter.setFileName(m_targetFilePath);

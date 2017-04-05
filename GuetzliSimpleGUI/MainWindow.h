@@ -22,6 +22,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QString m_lastSourceDirectory;
     QString m_sourceFilePath;
     QByteArray m_sourceFormat;
     float m_sourceGamma;

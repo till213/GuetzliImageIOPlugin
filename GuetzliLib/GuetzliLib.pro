@@ -24,11 +24,10 @@ CONFIG(debug, debug|release) {
     DESTDIR = $$PWD/../bin/debug
     message(Building $$TARGET in debug mode)
 
-    QMAKE_CXXFLAGS = -stdlib=libc++ -MMD -MP -g -std=c++11
+    QMAKE_CXXFLAGS_DEBUG = -MMD -MP -g
 } else {
     DESTDIR = $$PWD/../bin/release
     message(Building $$TARGET in release mode)
 
-    QMAKE_CXXFLAGS_RELEASE = -O3
-    QMAKE_CXXFLAGS = -stdlib=libc++ -MMD -MP -g -std=c++11
+    QMAKE_CXXFLAGS_RELEASE = -O3 -MMD -MP -g
 }
