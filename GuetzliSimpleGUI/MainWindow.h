@@ -2,6 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QString>
+
+class QImage;
+class QWidget;
 
 namespace Ui {
 class MainWindow;
@@ -18,8 +22,11 @@ public:
 private:
     Ui::MainWindow *ui;
     QString m_filePath;
+    QImage *m_image;
 
-public  slots:
+    void updateUi();
+
+private  slots:
     void openImage();
     void saveImage();
 };

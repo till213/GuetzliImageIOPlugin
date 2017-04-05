@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>419</width>
-    <height>335</height>
+    <width>498</width>
+    <height>436</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,10 +18,22 @@
     <item row="0" column="0">
      <widget class="QLabel" name="imagePreviewLabel">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>480</width>
+        <height>360</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>480</width>
+        <height>360</height>
+       </size>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -30,11 +42,27 @@
        <string/>
       </property>
       <property name="scaledContents">
-       <bool>true</bool>
+       <bool>false</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
     <item row="1" column="0">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="2" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QPushButton" name="openButton">
@@ -52,7 +80,7 @@
          <string>Save as guetzli image</string>
         </property>
         <property name="text">
-         <string>&amp;Save As...</string>
+         <string>Save &amp;As...</string>
         </property>
        </widget>
       </item>
@@ -78,8 +106,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>419</width>
-     <height>22</height>
+     <width>498</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -88,6 +116,8 @@
     </property>
     <addaction name="openAction"/>
     <addaction name="saveAsAction"/>
+    <addaction name="separator"/>
+    <addaction name="quitAction"/>
    </widget>
    <addaction name="fileMenu"/>
   </widget>
@@ -113,6 +143,14 @@
     <string>Ctrl+S</string>
    </property>
   </action>
+  <action name="quitAction">
+   <property name="text">
+    <string>&amp;Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
@@ -124,8 +162,8 @@
    <slot>openImage()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>293</y>
+     <x>78</x>
+     <y>324</y>
     </hint>
     <hint type="destinationlabel">
      <x>21</x>
@@ -140,8 +178,8 @@
    <slot>saveImage()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>232</x>
-     <y>294</y>
+     <x>165</x>
+     <y>324</y>
     </hint>
     <hint type="destinationlabel">
      <x>313</x>
@@ -170,6 +208,22 @@
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>saveImage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>209</x>
+     <y>167</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>quitAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
