@@ -34,6 +34,8 @@ QImageIOHandler *GuetzliImageIOPlugin::create(QIODevice *device, const QByteArra
     guetzliImageIOHandler->setFormat("guetzli");
     guetzliImageIOHandler->setDevice(device);
 
+
+
     return guetzliImageIOHandler;
 
 }

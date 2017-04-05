@@ -45,6 +45,7 @@ const int GuetzliImageIOHandler::DefaultQuality = 85;
 
 
 GuetzliImageIOHandler::GuetzliImageIOHandler()
+    : m_quality(DefaultQuality)
 {
 
 }
@@ -70,9 +71,12 @@ bool GuetzliImageIOHandler::write(const QImage &image)
     int qualityValue;
     if (quality.isValid()) {
         qualityValue = quality.toInt();
+        qDebug("Quality Option: %d", qualityValue);
     } else {
         qualityValue = DefaultQuality;
     }
+
+    qDebug("Final Quality Option: %d", qualityValue);
 
     params.butteraugli_target = guetzli::ButteraugliScoreForQuality(qualityValue);
 
@@ -87,14 +91,45 @@ bool GuetzliImageIOHandler::write(const QImage &image)
     return this->device()->write(outData.data(), outData.size()) != -1;
 }
 
+QVariant GuetzliImageIOHandler::option(ImageOption option) const
+{
+    QVariant value;
+
+    switch (option) {
+    case ImageOption::Quality:
+        value = m_quality;
+        break;
+    default:
+        value = QImageIOHandler::option(option);
+        break;
+    }
+
+    return value;
+}
+
+void GuetzliImageIOHandler::setOption(ImageOption option, const QVariant &value)
+{
+    switch (option) {
+    case ImageOption::Quality:
+        // By default the guetzli encoder expects a minimum quality of 84
+        m_quality = qBound(84, value.toInt(), 100);
+        break;
+    default:
+        QImageIOHandler::setOption(option, value);
+        break;
+    }
+}
+
 bool GuetzliImageIOHandler::supportsOption(ImageOption option) const
 {
     bool support;
     switch (option) {
     case ImageOption::Quality:
         support = true;
+        break;
     default:
         support = false;
+        break;
     }
 
     return support;
