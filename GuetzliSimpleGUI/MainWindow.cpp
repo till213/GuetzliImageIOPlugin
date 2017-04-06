@@ -4,9 +4,10 @@
 #include <QPixmap>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QDir>
 #include <QStandardPaths>
 #include <QElapsedTimer>
-
+#include <QCoreApplication>
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
@@ -73,7 +74,15 @@ void MainWindow::updateUi()
 
 }
 
-// Private Slots
+QString MainWindow::suggestTargetFileName()
+{
+    QString suggestedName;
+
+    suggestedName = QFileInfo(m_sourceFilePath).baseName() + ".jpg";
+    return suggestedName;
+}
+
+// Private slots
 
 void MainWindow::openImage()
 {
@@ -114,16 +123,24 @@ void MainWindow::saveImage()
     QElapsedTimer elapsedTimer;
     if (!m_image->isNull()) {
         QString filter("Guetzli (*.jpg)");
-        if (!m_targetFilePath.isEmpty()) {
-            m_targetFilePath = m_lastSourceDirectory;
+        QString filePath;
+        if (m_targetFilePath.isEmpty()) {
+            filePath = m_lastSourceDirectory + QDir::separator() + this->suggestTargetFileName();
+        } else {
+           filePath = QFileInfo(m_targetFilePath).absolutePath() + QDir::separator() + this->suggestTargetFileName();
         }
-        m_targetFilePath = QFileDialog::getSaveFileName(this, tr("Save"), m_targetFilePath, filter);
+        m_targetFilePath = QFileDialog::getSaveFileName(this, tr("Save"), filePath, filter);
         if (!m_targetFilePath.isNull()) {
+            // Make sure that the file dialog gets a chance (event) to close
+            // (Specifically on macOS)
+            QCoreApplication::processEvents();
+
             QImageWriter imageWriter;
             imageWriter.setFileName(m_targetFilePath);
             imageWriter.setFormat("guetzli");
             int quality = ui->qualitySpinBox->text().toInt();
             imageWriter.setQuality(quality);
+
             elapsedTimer.start();
             imageWriter.write(*m_image);
             m_elapsed = elapsedTimer.elapsed();

@@ -31,6 +31,7 @@ private:
     qint64 m_elapsed;
 
     void updateUi();
+    QString suggestTargetFileName();
 
 private  slots:
     void openImage();
