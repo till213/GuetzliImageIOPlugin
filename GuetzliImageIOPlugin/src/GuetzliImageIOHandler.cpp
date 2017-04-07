@@ -47,7 +47,6 @@ const int GuetzliImageIOHandler::DefaultQuality = 85;
 GuetzliImageIOHandler::GuetzliImageIOHandler()
     : m_quality(DefaultQuality)
 {
-
 }
 
 bool GuetzliImageIOHandler::canRead() const
@@ -71,12 +70,9 @@ bool GuetzliImageIOHandler::write(const QImage &image)
     int qualityValue;
     if (quality.isValid()) {
         qualityValue = quality.toInt();
-        qDebug("Quality Option: %d", qualityValue);
     } else {
         qualityValue = DefaultQuality;
     }
-
-    qDebug("Final Quality Option: %d", qualityValue);
 
     params.butteraugli_target = guetzli::ButteraugliScoreForQuality(qualityValue);
 

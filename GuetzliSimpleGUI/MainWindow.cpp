@@ -125,9 +125,9 @@ void MainWindow::saveImage()
         QString filter("Guetzli (*.jpg)");
         QString filePath;
         if (m_targetFilePath.isEmpty()) {
-            filePath = m_lastSourceDirectory + QDir::separator() + this->suggestTargetFileName();
+            filePath = m_lastSourceDirectory + QChar("/") + this->suggestTargetFileName();
         } else {
-           filePath = QFileInfo(m_targetFilePath).absolutePath() + QDir::separator() + this->suggestTargetFileName();
+            filePath = QFileInfo(m_targetFilePath).absolutePath() + QChar("/") + this->suggestTargetFileName();
         }
         m_targetFilePath = QFileDialog::getSaveFileName(this, tr("Save"), filePath, filter);
         if (!m_targetFilePath.isNull()) {
@@ -141,9 +141,12 @@ void MainWindow::saveImage()
             int quality = ui->qualitySpinBox->text().toInt();
             imageWriter.setQuality(quality);
 
+            // Get some coffee now, together with some guetzli maybe
+            QApplication::setOverrideCursor(Qt::WaitCursor);
             elapsedTimer.start();
             imageWriter.write(*m_image);
             m_elapsed = elapsedTimer.elapsed();
+            QApplication::restoreOverrideCursor();
         }
     }
     updateUi();
