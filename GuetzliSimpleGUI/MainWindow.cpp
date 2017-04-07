@@ -125,15 +125,12 @@ void MainWindow::saveImage()
         QString filter("Guetzli (*.jpg)");
         QString filePath;
         if (m_targetFilePath.isEmpty()) {
-            filePath = m_lastSourceDirectory + QChar("/") + this->suggestTargetFileName();
+            filePath = m_lastSourceDirectory + "/" + this->suggestTargetFileName();
         } else {
-            filePath = QFileInfo(m_targetFilePath).absolutePath() + QChar("/") + this->suggestTargetFileName();
+            filePath = QFileInfo(m_targetFilePath).absolutePath() + "/" + this->suggestTargetFileName();
         }
         m_targetFilePath = QFileDialog::getSaveFileName(this, tr("Save"), filePath, filter);
         if (!m_targetFilePath.isNull()) {
-            // Make sure that the file dialog gets a chance (event) to close
-            // (Specifically on macOS)
-            QCoreApplication::processEvents();
 
             QImageWriter imageWriter;
             imageWriter.setFileName(m_targetFilePath);
@@ -143,10 +140,18 @@ void MainWindow::saveImage()
 
             // Get some coffee now, together with some guetzli maybe
             QApplication::setOverrideCursor(Qt::WaitCursor);
+            ui->statusBar->showMessage(tr("Baking guetzli..."));
+
+            // Make sure that the file dialog gets a chance (event) to close
+            // (Specifically on macOS)
+            QCoreApplication::processEvents();
+
             elapsedTimer.start();
             imageWriter.write(*m_image);
             m_elapsed = elapsedTimer.elapsed();
+            ui->statusBar->showMessage(tr("Guetzli ready."), 5000);
             QApplication::restoreOverrideCursor();
+
         }
     }
     updateUi();
