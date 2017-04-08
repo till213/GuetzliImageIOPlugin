@@ -105,7 +105,6 @@ void MainWindow::openImage()
             ui->imagePreviewLabel->setPixmap(QPixmap::fromImage(previewImage));
         } else {
             m_sourceFormat = "";
-            m_sourceGamma = 0.0f;
         }
     }
     updateUi();
