@@ -21,12 +21,12 @@ CONFIG(debug, debug|release) {
 
 
 CONFIG(debug, debug|release) {
-    DESTDIR = $$PWD/../bin/debug
+    DESTDIR = $$PWD/../lib/debug
     message(Building $$TARGET in debug mode)
 
     QMAKE_CXXFLAGS_DEBUG = -MMD -MP -g
 } else {
-    DESTDIR = $$PWD/../bin/release
+    DESTDIR = $$PWD/../lib/release
     message(Building $$TARGET in release mode)
 
     QMAKE_CXXFLAGS_RELEASE = -O3 -MMD -MP -g
