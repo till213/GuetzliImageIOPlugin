@@ -25,7 +25,6 @@ private:
     QString m_lastSourceDirectory;
     QString m_sourceFilePath;
     QByteArray m_sourceFormat;
-    float m_sourceGamma;
     QString m_targetFilePath;
     QImage *m_image;
     qint64 m_elapsed;

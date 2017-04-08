@@ -8,12 +8,12 @@ QT -= core gui
 INCLUDEPATH =  $$PWD/guetzli $$PWD/guetzli/third_party/butteraugli
 
 CONFIG(debug, debug|release) {
-    OBJECTS_DIR    = obj/debug
+    OBJECTS_DIR    = bin/debug
     MOC_DIR        = GeneratedFiles/debug
     UI_DIR         = GeneratedFiles/debug
     INCLUDEPATH   += GeneratedFiles/debug
 } else {
-    OBJECTS_DIR    = obj/release
+    OBJECTS_DIR    = bin/release
     MOC_DIR        = GeneratedFiles/release
     UI_DIR         = GeneratedFiles/release
     INCLUDEPATH   += GeneratedFiles/release

@@ -51,14 +51,8 @@ void MainWindow::updateUi()
     }
     if (!m_image->isNull()) {
         ui->sourceFormatLabel->setText(QString(m_sourceFormat));
-        if (m_sourceGamma != 0.0) {
-            ui->sourceGammaLabel->setText(QString("%1").arg(m_sourceGamma));
-        } else {
-            ui->sourceGammaLabel->setText(tr("N/A"));
-        }
     } else {
         ui->sourceFormatLabel->setText(QString());
-        ui->sourceGammaLabel->setText(QString());
     }
 
     // Target file (guetzli)
@@ -96,7 +90,6 @@ void MainWindow::openImage()
         *m_image = reader.read();
         if (!m_image->isNull()) {
 
-            m_sourceGamma = reader.gamma();
             QImage previewImage;
             if (m_image->width() > ui->imagePreviewLabel->maximumWidth() ||
                 m_image->height() > ui->imagePreviewLabel->maximumHeight()

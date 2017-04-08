@@ -18,12 +18,12 @@ DESTDIR = $$[QT_INSTALL_PLUGINS]/imageformats
 INCLUDEPATH = $$PWD/../GuetzliLib/guetzli $$PWD/../GuetzliLib/guetzli/third_party/butteraugli
 
 CONFIG(debug, debug|release) {
-    OBJECTS_DIR    = obj/debug
+    OBJECTS_DIR    = object/debug
     MOC_DIR        = GeneratedFiles/debug
     UI_DIR         = GeneratedFiles/debug
     INCLUDEPATH   += GeneratedFiles/debug
 } else {
-    OBJECTS_DIR    = obj/release
+    OBJECTS_DIR    = object/release
     MOC_DIR        = GeneratedFiles/release
     UI_DIR         = GeneratedFiles/release
     INCLUDEPATH   += GeneratedFiles/release
