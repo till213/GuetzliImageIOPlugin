@@ -75,11 +75,11 @@ If you want to install the plugin into the Qt image format plugin directory you 
 make install
 ```
 
-This will copy the plugin into the corresponding imageformats folder of the Qt installation.
+This will copy the plugin into the corresponding __imageformats__ folder of the Qt installation.
 
 ## macOS
 
-With the stock binary Qt distribution, e.g. Qt version 5.6.2:
+With the stock binary Qt distribution, e.g. Qt version 5.6.2 the plugin will be copied into:
 
 ```
 ~/Qt5.6.2/5.6/clang_64/plugins/imageformats/libGuetzliImageIOPlugin.dylib
@@ -134,7 +134,7 @@ bool success = image.save("guetzli.jpg", "guetzli", 90);
 Deploy the GuetzliImageIOPlugin together with your application in a subdirectory called __imageformats__.
 
 ```
-[application path]/imageformats/libGuetzliImageIOPlugin.dylib
+[application directory]/imageformats/libGuetzliImageIOPlugin.dylib
 ```
 
 # Credits
@@ -143,7 +143,7 @@ This is a simple derivative work done in my free time. All credits go to Robert 
 
 # License
 
-The Qt plugin code is under the LGPL 3.0.
+The Qt plugin code is under the [LGPL 3](LICENSE).
 
 Note that the Google guetzli code comes with its own [Apache License 2.0](https://github.com/google/guetzli/blob/master/LICENSE).
 
