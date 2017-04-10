@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    m_image = new QImage();
+
     QStringList standardLocations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
     if (standardLocations.size() > 0) {
         m_lastSourceDirectory = standardLocations[0];
@@ -27,7 +27,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete m_image;
     delete ui;
 }
 
@@ -35,7 +34,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::updateUi()
 {
-    bool enabled = !m_image->isNull();
+    bool enabled = !m_image.isNull();
     ui->saveAsAction->setEnabled(enabled);
     ui->saveButton->setEnabled(enabled);
 
@@ -49,7 +48,7 @@ void MainWindow::updateUi()
         ui->sourceSizeLabel->setText(QString());
         this->setWindowTitle(QString("Guetzli Simple GUI"));
     }
-    if (!m_image->isNull()) {
+    if (!m_image.isNull()) {
         ui->sourceFormatLabel->setText(QString(m_sourceFormat));
     } else {
         ui->sourceFormatLabel->setText(QString());
@@ -87,20 +86,20 @@ void MainWindow::openImage()
         m_lastSourceDirectory = QFileInfo(m_sourceFilePath).absolutePath();
         QImageReader reader(m_sourceFilePath);
         m_sourceFormat = reader.format();
-        *m_image = reader.read();
-        if (!m_image->isNull()) {
+        m_image = reader.read();
+        if (!m_image.isNull()) {
 
             QImage previewImage;
-            if (m_image->width() > ui->imagePreviewLabel->maximumWidth() ||
-                m_image->height() > ui->imagePreviewLabel->maximumHeight()
+            if (m_image.width() > ui->imagePreviewLabel->maximumWidth() ||
+                m_image.height() > ui->imagePreviewLabel->maximumHeight()
                ) {
-                if (m_image->width() > m_image->height()) {
-                    previewImage = m_image->scaledToWidth(ui->imagePreviewLabel->maximumWidth());
+                if (m_image.width() > m_image.height()) {
+                    previewImage = m_image.scaledToWidth(ui->imagePreviewLabel->maximumWidth());
                 } else {
-                    previewImage = m_image->scaledToHeight(ui->imagePreviewLabel->maximumHeight());
+                    previewImage = m_image.scaledToHeight(ui->imagePreviewLabel->maximumHeight());
                 }
             } else {
-                previewImage = *m_image;
+                previewImage = m_image;
             }
             ui->imagePreviewLabel->setPixmap(QPixmap::fromImage(previewImage));
         } else {
@@ -113,7 +112,8 @@ void MainWindow::openImage()
 void MainWindow::saveImage()
 {
     QElapsedTimer elapsedTimer;
-    if (!m_image->isNull()) {
+
+    if (!m_image.isNull()) {
         QString filter("Guetzli (*.jpg)");
         QString filePath;
         if (m_targetFilePath.isEmpty()) {
@@ -139,7 +139,7 @@ void MainWindow::saveImage()
             QCoreApplication::processEvents();
 
             elapsedTimer.start();
-            imageWriter.write(*m_image);
+            imageWriter.write(m_image);
             m_elapsed = elapsedTimer.elapsed();
             ui->statusBar->showMessage(tr("Guetzli ready."), 5000);
             QApplication::restoreOverrideCursor();

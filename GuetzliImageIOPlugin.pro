@@ -12,3 +12,5 @@ GuetzliSimpleGUI.depends = GuetzliLib GuetzliImageIOPlugin
 # Define PNG dependency first
 #Guetzli.subdir = Guetzli
 #Guetzli.depends = GuetzliLib
+
+OTHER_FILES += README.md

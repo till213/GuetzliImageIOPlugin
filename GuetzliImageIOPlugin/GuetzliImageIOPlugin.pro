@@ -9,11 +9,11 @@ include(Sources.pri)
 
 QT += core gui
 
-TARGET = GuetzliIOPlugin
+TARGET = GuetzliImageIOPlugin
 TEMPLATE = lib
 CONFIG += plugin c++11
 
-INCLUDEPATH = $$PWD/../GuetzliLib/guetzli $$PWD/../GuetzliLib/guetzli/third_party/butteraugli
+INCLUDEPATH += $$PWD/../GuetzliLib/guetzli $$PWD/../GuetzliLib/guetzli/third_party/butteraugli
 
 CONFIG(debug, debug|release) {
     OBJECTS_DIR    = object/debug

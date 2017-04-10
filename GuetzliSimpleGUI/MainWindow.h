@@ -4,8 +4,8 @@
 #include <QMainWindow>
 #include <QString>
 #include <QByteArray>
+#include <QImage>
 
-class QImage;
 class QWidget;
 
 namespace Ui {
@@ -26,7 +26,7 @@ private:
     QString m_sourceFilePath;
     QByteArray m_sourceFormat;
     QString m_targetFilePath;
-    QImage *m_image;
+    QImage m_image;
     qint64 m_elapsed;
 
     void updateUi();
