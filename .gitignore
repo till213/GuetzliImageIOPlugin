@@ -17,6 +17,7 @@ GeneratedFiles
 bin
 object
 dist
+lib
 
 # Qt Creator
 *.pro.user*
