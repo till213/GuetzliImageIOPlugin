@@ -24,15 +24,11 @@ CONFIG(debug, debug|release) {
 }
 
 CONFIG(debug, debug|release) {
-    DESTDIR = $$PWD/bin/debug
+    DESTDIR = $$PWD/../bin/debug
     message(Building $$TARGET in debug mode)
-
-    QMAKE_CXXFLAGS_DEBUG = -MMD -MP -g
 } else {
-    DESTDIR = $$PWD/bin/release
+    DESTDIR = $$PWD/../bin/release
     message(Building $$TARGET in release mode)
-
-    QMAKE_CXXFLAGS_RELEASE = -O3 -MMD -MP -g
 }
 
 SOURCES += main.cpp\

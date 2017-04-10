@@ -7,13 +7,11 @@
 include(Sources.pri)
 
 
-QT       += core gui
+QT += core gui
 
 TARGET = GuetzliIOPlugin
 TEMPLATE = lib
 CONFIG += plugin c++11
-
-DESTDIR = $$[QT_INSTALL_PLUGINS]/imageformats
 
 INCLUDEPATH = $$PWD/../GuetzliLib/guetzli $$PWD/../GuetzliLib/guetzli/third_party/butteraugli
 
@@ -31,12 +29,14 @@ CONFIG(debug, debug|release) {
 
 CONFIG(debug, debug|release) {
     LIBS += -L$$PWD/../lib/debug -lGuetzliLib
+    DESTDIR = $$PWD/../bin/debug/imageformats
 } else {
     LIBS += -L$$PWD/../lib/release -lGuetzliLib
+    DESTDIR = $$PWD/../bin/release/imageformats
 }
 
 unix {
-    target.path = /usr/lib
+    target.path = $$[QT_INSTALL_PLUGINS]/imageformats
     INSTALLS += target
 }
 
