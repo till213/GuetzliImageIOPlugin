@@ -38,13 +38,26 @@ The plugin is mainly developed on macOS, but in parallel also on Windows 10 and 
 On Windows the stock binary Qt based on MinGW 4.9.2 is used.
 
 
-## On POSIX systems and MinGW
+## On POSIX systems
 
 ```
 cd GuetzliImageIOPlugin
 qmake -r
 make
 ```
+
+## On MinGW (Windows)
+
+```
+cd GuetzliImageIOPlugin
+qmake -r
+mingw32-make.exe
+```
+
+## Qt Creator (all platforms)
+
+Alternatively you can open the top-level __GuetzliImageIOPLugin.pro__ file in Qt Creator
+and build the projects as usual, for instance with __CTRL + B__ (__CMD + B__ on macOS).
 
 This will build all projects, including the GuetzliImageIOPlugin and the GuetzliSimpleGUI.
 
