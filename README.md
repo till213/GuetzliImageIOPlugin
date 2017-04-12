@@ -30,14 +30,12 @@ git submodule init
 git submodule update
 ```
 
-
 # Building
 
 The plugin is mainly developed on macOS, but in parallel also on Windows 10 and FreeBSD, using
 [Qt 5.6.2](https://www.qt.io/download/) or higher and qmake with *.pro project files.
 
 On Windows the stock binary Qt based on MinGW 4.9.2 is used.
-
 
 ## On POSIX systems
 
@@ -99,8 +97,7 @@ su root
 sudo make install
 ```
 
-
-## macOS
+## Plugin Directory
 
 With the stock binary Qt distribution, e.g. Qt version 5.6.2 the plugin will be copied into:
 
