@@ -100,7 +100,7 @@ sudo make install
 ```
 
 
-## macOS
+## Qt Plugin Directory
 
 With the stock binary Qt distribution, e.g. Qt version 5.6.2 the plugin will be copied into:
 
