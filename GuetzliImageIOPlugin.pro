@@ -16,4 +16,5 @@ GuetzliSimpleGUI.depends = GuetzliLib GuetzliImageIOPlugin
 #Guetzli.subdir = Guetzli
 #Guetzli.depends = GuetzliLib
 
-OTHER_FILES += README.md
+OTHER_FILES += README.md \
+               LICENSE

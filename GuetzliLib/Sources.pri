@@ -1,4 +1,5 @@
-DEPENDPATH += $$PWD/guetzli/guetzli
+DEPENDPATH += $$PWD/guetzli/guetzli \
+              $$PWD/guetzli/third_party/butteraugli
 
 # Guetzli
 

@@ -1,5 +1,7 @@
 DEPENDPATH += $$PWD/GeneratedFiles \
-              $$PWD/src
+              $$PWD/src \
+              $$PWD/../GuetzliLib/guetzli \
+              $$PWD/../GuetzliLib/guetzli/third_party/butteraugli
 
 HEADERS   += $$PWD/src/GuetzliImageIOPlugin.h \
              $$PWD/src/GuetzliImageIOHandler.h

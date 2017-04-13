@@ -1,12 +1,10 @@
-include(Sources.pri)
-
-QT += testlib
-TEMPLATE = app
-TARGET = GuetzliImageIOPluginTest
-INCLUDEPATH += .
 CONFIG += c++11
-CONFIG -= app_bundle
 
+# For unknown reasons to me FreeBSD 'make' trips over the mere existence
+# of a subdirectory called 'obj'. Also refer to e.g.
+# http://stackoverflow.com/questions/26002517/makefile-under-freebsd-does-not-compile-works-on-linux
+# (using 'gmake' instead seems to solve the problem there, but does not
+# explain why 'make' alone does not work)
 CONFIG(debug, debug|release) {
     OBJECTS_DIR    = object/debug
     MOC_DIR        = GeneratedFiles/debug
@@ -20,10 +18,9 @@ CONFIG(debug, debug|release) {
 }
 
 CONFIG(debug, debug|release) {
-    DESTDIR = $$PWD/../../bin/debug
+    DESTDIR = $$PWD/bin/debug
     message(Building $$TARGET in debug mode)
 } else {
-    DESTDIR = $$PWD/../../bin/release
+    DESTDIR = $$PWD/bin/release
     message(Building $$TARGET in release mode)
 }
-
