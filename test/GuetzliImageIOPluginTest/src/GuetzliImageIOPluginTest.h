@@ -4,21 +4,26 @@
 #include <QObject>
 #include <QImage>
 #include <QSize>
+#include <QVector>
 
 class GuetzliImageIOPluginTest : public QObject
 {
     Q_OBJECT
 
 private:
-    bool compareImages(const QImage &actualImage, const QImage &expectedImage);
+    QVector<QRgb> m_clut;
+
     QImage create(const QSize &size, QImage::Format format);
+
+    static bool compareImages(const QImage &actualImage, const QImage &expectedImage);
+    static QImage createJPEGData(const QImage &image);
 
 private slots:
     void initTestCase();
     void cleanupTestCase();
 
-    void save_data();
-    void save();
+    void compareWithJPEG_data();
+    void compareWithJPEG();
 };
 
 

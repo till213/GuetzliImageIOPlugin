@@ -9,9 +9,11 @@ CONFIG      += plugin
 INCLUDEPATH += $$PWD/../GuetzliLib/guetzli $$PWD/../GuetzliLib/guetzli/third_party/butteraugli
 
 CONFIG(debug, debug|release) {
-    LIBS += -L$$PWD/../lib/debug -lGuetzliLib
+    LIBS   += -L$$PWD/../lib/debug -lGuetzliLib
+    DESTDIR = $$PWD/../bin/debug/imageformats
 } else {
-    LIBS += -L$$PWD/../lib/release -lGuetzliLib
+    LIBS   += -L$$PWD/../lib/release -lGuetzliLib
+    DESTDIR = $$PWD/../bin/release/imageformats
 }
 
 # Installation
