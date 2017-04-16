@@ -13,26 +13,55 @@
 namespace
 {
 
-void fetchRGB(const QImage &image, std::vector<uint8_t> *rgb) {
+inline uint8_t blendOnBlack(uint8_t val, uint8_t alpha) {
+  return (static_cast<int>(val) * static_cast<int>(alpha) + 128) / 255;
+}
+
+void fetchRGB(const QImage &image, std::vector<uint8_t> *rgb)
+{
 
     rgb->resize(3 * image.width() * image.height());
 
     // @todo Treat each format (that we want to support) individually - here we go the Cheap Way(tm)
     // by making sure that the image format is RGB, 8 bit per channel
+
     QImage rgbImage;
-    if (image.format() != QImage::Format_RGB888) {
-        rgbImage = image.convertToFormat(QImage::Format_RGB888);
-    } else {
-        rgbImage = image;
-    }
+    const uint8_t *bits = image.bits();
+    const int size = image.width() * image.height();
+    uint8_t *rgbp = &(*rgb)[0];
+    switch(image.format()) {
+    case QImage::Format_ARGB32:
 
-    // RGB
-    for (int y = 0; y < rgbImage.height(); ++y) {
+        for (int i = 0; i < size; i++) {
+            // 0xAARRGGBB
+            uint8_t b = *bits++;
+            uint8_t g = *bits++;
+            uint8_t r = *bits++;
+            uint8_t a = *bits++;
 
-        const uint8_t *row_in = rgbImage.scanLine(y);
-        uint8_t *row_out = &(*rgb)[3 * y * rgbImage.width()];
-        memcpy(row_out, row_in, 3 * rgbImage.width());
+            // Convert to RGB888
+            *rgbp++ = blendOnBlack(r, a);
+            *rgbp++ = blendOnBlack(g, a);
+            *rgbp++ = blendOnBlack(b, a);
+        }
+        break;
 
+    default:
+        if (image.format() != QImage::Format_RGB888) {
+            rgbImage = image.convertToFormat(QImage::Format_RGB888);
+        } else {
+            rgbImage = image;
+        }
+
+        // RGB
+        for (int y = 0; y < rgbImage.height(); ++y) {
+
+            const uint8_t *row_in = rgbImage.scanLine(y);
+            uint8_t *row_out = &(*rgb)[3 * y * rgbImage.width()];
+            memcpy(row_out, row_in, 3 * rgbImage.width());
+
+        }
+        break;
     }
 
 }

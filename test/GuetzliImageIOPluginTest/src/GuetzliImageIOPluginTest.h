@@ -14,6 +14,8 @@ private:
     QVector<QRgb> m_clut;
 
     QImage create(const QSize &size, QImage::Format format);
+    QImage createFilled(QRgb color, const QSize &size, QImage::Format format, bool alpha);
+
 
     static bool compareImages(const QImage &actualImage, const QImage &expectedImage);
     static QImage createJPEGData(const QImage &image);
@@ -22,6 +24,7 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
+    void checkGuetzliPlugin();
     void compareWithJPEG_data();
     void compareWithJPEG();
 };
