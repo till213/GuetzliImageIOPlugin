@@ -151,7 +151,7 @@ bool GuetzliImageIOPluginTest::compareImages(const QImage &actualImage, const QI
     float mseGreen;
     float mseBlue;
     float mseAlpha;
-    constexpr float MseThreshold = 0.0005f;
+    constexpr float MseThreshold = 0.01f;
 
     mseRed = mseGreen = mseBlue = mseAlpha = 0.0f;
     for (int y = 0; y < actualImage.height(); ++y) {
@@ -178,12 +178,13 @@ bool GuetzliImageIOPluginTest::compareImages(const QImage &actualImage, const QI
     }
 
     float total = (actualImage.width() * actualImage.height());
-    mseRed = mseRed / total;
-    mseGreen = mseGreen / total;
-    mseBlue = mseBlue / total;
-    mseAlpha = mseAlpha / total;
+    float totalSquare = total * total;
+    mseRed = mseRed / totalSquare;
+    mseGreen = mseGreen / totalSquare;
+    mseBlue = mseBlue / totalSquare;
+    mseAlpha = mseAlpha / totalSquare;
 
-    return mseRed / total < MseThreshold && mseGreen / total < MseThreshold && mseBlue / total < MseThreshold && mseAlpha / total < MseThreshold;
+    return mseRed < MseThreshold && mseGreen < MseThreshold && mseBlue < MseThreshold && mseAlpha < MseThreshold;
 }
 
 QImage GuetzliImageIOPluginTest::createJPEGData(const QImage &image)
