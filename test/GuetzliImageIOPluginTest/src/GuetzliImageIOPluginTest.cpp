@@ -16,6 +16,8 @@ namespace {
 
 // Private
 
+QVector<QRgb> GuetzliImageIOPluginTest::m_clut;
+
 QImage GuetzliImageIOPluginTest::create(const QSize &size, QImage::Format format)
 {
     QImage image = QImage(size, format);
@@ -26,8 +28,11 @@ QImage GuetzliImageIOPluginTest::create(const QSize &size, QImage::Format format
         for (int y = 0; y < image.height(); ++y) {
 
             for (int x = 0; x < image.width(); ++x) {
-                int gray = qRound(static_cast<float>(x) / (image.width() - 1) * 255.0f);
-                image.setPixel(x, y, gray);
+                uint gray = qRound(static_cast<float>(x) / (image.width() - 1) * 255.0f);
+                // Note: even though the final format uses 8bit gray values we still need to
+                // set a proper RGB (gray) value here; also refer to https://bugreports.qt.io/browse/QTBUG-53101
+                QColor grayColor = QColor(gray, gray, gray);
+                image.setPixel(x, y, grayColor.rgb());
             }
 
         }
@@ -75,7 +80,7 @@ QImage GuetzliImageIOPluginTest::create(const QSize &size, QImage::Format format
     return image;
 }
 
-QImage GuetzliImageIOPluginTest::createFilled(QRgb rgb, const QSize &size, QImage::Format format, bool alpha)
+QImage GuetzliImageIOPluginTest::createFilled(QRgb rgb, const QSize &size, QImage::Format format, bool alphaGradient)
 {
     QImage image = QImage(size, format);
 
@@ -111,14 +116,13 @@ QImage GuetzliImageIOPluginTest::createFilled(QRgb rgb, const QSize &size, QImag
         break;
     }
     default:
-
         // Create some coloured image with alpha
         for (int y = 0; y < image.height(); ++y) {
 
             for (int x = 0; x < image.width(); ++x) {
 
                 int a;
-                if (alpha) {
+                if (alphaGradient) {
                     a = qRound(static_cast<float>(y) / (image.height() - 1) * 255.0f);
                 } else {
                     a = 255;
@@ -135,7 +139,6 @@ QImage GuetzliImageIOPluginTest::createFilled(QRgb rgb, const QSize &size, QImag
 
         }
         break;
-
     }
 
     return image;
@@ -148,7 +151,7 @@ bool GuetzliImageIOPluginTest::compareImages(const QImage &actualImage, const QI
     float mseGreen;
     float mseBlue;
     float mseAlpha;
-    const float MseThreshold = 20.0;
+    constexpr float MseThreshold = 0.0005f;
 
     mseRed = mseGreen = mseBlue = mseAlpha = 0.0f;
     for (int y = 0; y < actualImage.height(); ++y) {
@@ -180,7 +183,7 @@ bool GuetzliImageIOPluginTest::compareImages(const QImage &actualImage, const QI
     mseBlue = mseBlue / total;
     mseAlpha = mseAlpha / total;
 
-    return mseRed < MseThreshold && mseGreen < MseThreshold && mseBlue < MseThreshold && mseAlpha < MseThreshold;
+    return mseRed / total < MseThreshold && mseGreen / total < MseThreshold && mseBlue / total < MseThreshold && mseAlpha / total < MseThreshold;
 }
 
 QImage GuetzliImageIOPluginTest::createJPEGData(const QImage &image)
@@ -210,13 +213,64 @@ QImage GuetzliImageIOPluginTest::createJPEGData(const QImage &image)
     return jpegImage;
 }
 
+void GuetzliImageIOPluginTest::createTestData(const QSize &size, int quality)
+{
+    // ARGB32 red with alpha gradient
+    QImage image = createFilled(QColor(Qt::red).rgb(), size, QImage::Format_ARGB32, true);
+    QImage jpegImage = createJPEGData(image);
+    QTest::newRow(QString("Format_ARGB32-red-alpha-gradient-%1x%2-q%3").arg(size.width()).arg(size.height()).arg(quality).toLatin1())
+            << image << quality << jpegImage;
+
+    // ARGB32 green with alpha gradient
+    image = createFilled(QColor(Qt::green).rgb(), size, QImage::Format_ARGB32, true);
+    jpegImage = createJPEGData(image);
+    QTest::newRow(QString("Format_ARGB32-green-alpha-gradient-%1x%2-q%3").arg(size.width()).arg(size.height()).arg(quality).toLatin1())
+            << image << quality << jpegImage;
+
+    // ARGB32 green with alpha gradient
+    image = createFilled(QColor(Qt::blue).rgb(), size, QImage::Format_ARGB32, true);
+    jpegImage = createJPEGData(image);
+    QTest::newRow(QString("Format_ARGB32-blue-alpha-gradient-%1x%2-q%3").arg(size.width()).arg(size.height()).arg(quality).toLatin1())
+            << image << quality << jpegImage;
+
+    // Format_Grayscale8 gray
+    image = createFilled(QColor(Qt::gray).rgb(), size, QImage::Format_Grayscale8);
+    jpegImage = createJPEGData(image);
+    QTest::newRow(QString("Format_Grayscale8-gray-%1x%2-q%3").arg(size.width()).arg(size.height()).arg(quality).toLatin1())
+            << image << quality << jpegImage;
+
+    // Format_Indexed8 red
+    image = createFilled(QColor(Qt::red).rgb(), size, QImage::Format_Indexed8);
+    jpegImage = createJPEGData(image);
+    QTest::newRow(QString("Format_Indexed8-red-%1x%2-q%3").arg(size.width()).arg(size.height()).arg(quality).toLatin1())
+            << image << quality << jpegImage;
+
+    // ARGB32 pattern
+    image = create(size, QImage::Format_ARGB32);
+    jpegImage = createJPEGData(image);
+    QTest::newRow(QString("Format_ARGB32-pattern-%1x%2-q%3").arg(size.width()).arg(size.height()).arg(quality).toLatin1())
+            << image << quality << jpegImage;
+
+    // Indexed 8 pattern
+    image = create(size, QImage::Format_Indexed8);
+    jpegImage = createJPEGData(image);
+    QTest::newRow(QString("Format_Indexed8-pattern-%1x%2-q%3").arg(size.width()).arg(size.height()).arg(quality).toLatin1())
+            << image << quality << jpegImage;
+
+    // Grayscale 8 pattern
+    image = create(size, QImage::Format_Grayscale8);
+    jpegImage = createJPEGData(image);
+    QTest::newRow(QString("Format_Grayscale8-pattern-%1x%2-q%3").arg(size.width()).arg(size.height()).arg(quality).toLatin1())
+            << image << quality << jpegImage;
+}
+
 // Private slots
 
 void GuetzliImageIOPluginTest::initTestCase()
 {
-    const int Size = 256;
+    // Build color lookup table (clut)
+    constexpr int Size = 256;
     m_clut.resize(Size);
-
     for (int i = 0; i < Size; ++i) {
 
         QColor color;
@@ -270,49 +324,38 @@ void GuetzliImageIOPluginTest::compareWithJPEG_data()
     QTest::addColumn<int>("quality");
     QTest::addColumn<QImage>("expectedImage");
 
+    for (QSize size : sizes) {
+        // Test patterns
+        createTestData(size, HighQuality);
+    }
+
     for (int quality : qualities) {
-        for (QSize size : sizes) {
-            // ARGB32 red with alpha gradient
-            QImage image = createFilled(QColor(Qt::red).rgb(), size, QImage::Format_ARGB32, true);
-            QImage jpegImage = createJPEGData(image);
-            QTest::newRow(QString("Format_ARGB32-red-alpha-gradient-%1x%2-q%3").arg(size.width()).arg(size.height()).arg(quality).toLatin1())
-                    << image << quality << jpegImage;
+        // Test patterns
+        createTestData(SmallSize, quality);
 
-            // ARGB32 green with alpha gradient
-            image = createFilled(QColor(Qt::green).rgb(), size, QImage::Format_ARGB32, true);
-            jpegImage = createJPEGData(image);
-            QTest::newRow(QString("Format_ARGB32-green-alpha-gradient-%1x%2-q%3").arg(size.width()).arg(size.height()).arg(quality).toLatin1())
-                    << image << quality << jpegImage;
+        // Photo 1
+        QImage image = QImage(":/img/Los Angeles.png");
+        QImage jpegImage = createJPEGData(image);
+        QTest::newRow(QString("Los Angeles-%1x%2-q%3").arg(image.width()).arg(image.height()).arg(quality).toLatin1())
+                << image << quality << jpegImage;
 
-            // ARGB32 green with alpha gradient
-            image = createFilled(QColor(Qt::blue).rgb(), size, QImage::Format_ARGB32, true);
-            jpegImage = createJPEGData(image);
-            QTest::newRow(QString("Format_ARGB32-blue-alpha-gradient-%1x%2-q%3").arg(size.width()).arg(size.height()).arg(quality).toLatin1())
-                    << image << quality << jpegImage;
+        // Photo 2
+        image = QImage(":/img/Route 66.png");
+        jpegImage = createJPEGData(image);
+        QTest::newRow(QString("Route 66-%1x%2-q%3").arg(image.width()).arg(image.height()).arg(quality).toLatin1())
+                << image << quality << jpegImage;
 
-            // ARGB32 coloured
-            image = create(size, QImage::Format_ARGB32);
-            jpegImage = createJPEGData(image);
-            QTest::newRow(QString("Format_ARGB32-pattern-%1x%2-q%3").arg(size.width()).arg(size.height()).arg(quality).toLatin1())
-                    << image << quality << jpegImage;
-
-            // Indexed 8
-            image = create(size, QImage::Format_Indexed8);
-            jpegImage = createJPEGData(image);
-            QTest::newRow(QString("Format_Indexed8-pattern-%1x%2-q%3").arg(size.width()).arg(size.height()).arg(quality).toLatin1())
-                    << image << quality << jpegImage;
-
-            // Grayscale 8
-            image = create(size, QImage::Format_Grayscale8);
-            jpegImage = createJPEGData(image);
-            QTest::newRow(QString("Format_Grayscale8-pattern-%1x%2-q%3").arg(size.width()).arg(size.height()).arg(quality).toLatin1())
-                    << image << quality << jpegImage;
-        }
+        // Photo 3
+        image = QImage(":/img/Zurich.png");
+        jpegImage = createJPEGData(image);
+        QTest::newRow(QString("Zurich-%1x%2-q%3").arg(image.width()).arg(image.height()).arg(quality).toLatin1())
+                << image << quality << jpegImage;
     }
 }
 
 void GuetzliImageIOPluginTest::compareWithJPEG()
 {
+    // Setup
     QFETCH(QImage, sourceImage);
     QFETCH(int, quality);
     QFETCH(QImage, expectedImage);

@@ -11,14 +11,14 @@ class GuetzliImageIOPluginTest : public QObject
     Q_OBJECT
 
 private:
-    QVector<QRgb> m_clut;
+    static QVector<QRgb> m_clut;
 
-    QImage create(const QSize &size, QImage::Format format);
-    QImage createFilled(QRgb color, const QSize &size, QImage::Format format, bool alpha);
-
+    static QImage create(const QSize &size, QImage::Format format);
+    static QImage createFilled(QRgb color, const QSize &size, QImage::Format format, bool alpha = false);
 
     static bool compareImages(const QImage &actualImage, const QImage &expectedImage);
     static QImage createJPEGData(const QImage &image);
+    static void createTestData(const QSize &size, int quality);
 
 private slots:
     void initTestCase();

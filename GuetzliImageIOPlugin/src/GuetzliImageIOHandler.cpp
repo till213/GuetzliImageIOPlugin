@@ -12,14 +12,12 @@
 
 namespace
 {
-
 inline uint8_t blendOnBlack(uint8_t val, uint8_t alpha) {
-  return (static_cast<int>(val) * static_cast<int>(alpha) + 128) / 255;
+    return (static_cast<int>(val) * static_cast<int>(alpha) + 128) / 255;
 }
 
 void fetchRGB(const QImage &image, std::vector<uint8_t> *rgb)
 {
-
     rgb->resize(3 * image.width() * image.height());
 
     // @todo Treat each format (that we want to support) individually - here we go the Cheap Way(tm)
@@ -63,7 +61,6 @@ void fetchRGB(const QImage &image, std::vector<uint8_t> *rgb)
         }
         break;
     }
-
 }
 
 } // anonymous
