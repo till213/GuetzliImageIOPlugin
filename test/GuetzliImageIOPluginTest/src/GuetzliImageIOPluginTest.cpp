@@ -11,7 +11,7 @@
 namespace {
     // Set to true in order to write test images to disk; helpful
     // for debugging
-    constexpr bool WriteImagesToDisk = true;
+    constexpr bool WriteImagesToDisk = false;
 } // anonymous
 
 // Private
