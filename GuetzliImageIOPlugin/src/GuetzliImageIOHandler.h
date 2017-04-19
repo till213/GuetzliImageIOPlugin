@@ -1,17 +1,17 @@
 #ifndef GUETZLIIMAGEIOHANDLER_H
 #define GUETZLIIMAGEIOHANDLER_H
 
+#include <vector>
+
 #include <QImageIOHandler>
 #include <QVariant>
+#include <QColor>
 
 class QImage;
 
 class GuetzliImageIOHandler : public QImageIOHandler
 {
 public:
-
-    const static int DefaultQuality;
-
     GuetzliImageIOHandler();
 
     virtual bool canRead() const override;
@@ -22,7 +22,10 @@ public:
     virtual bool supportsOption(ImageOption option) const override;
 
 private:
+    const static int DefaultQuality;
     int m_quality;
+
+    void fetchRGB(const QImage &image, std::vector<uint8_t> *rgb);
 };
 
 #endif // GUETZLIIMAGEIOHANDLER_H

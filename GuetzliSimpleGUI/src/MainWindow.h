@@ -5,6 +5,7 @@
 #include <QString>
 #include <QByteArray>
 #include <QImage>
+#include <QColor>
 
 class QWidget;
 
@@ -29,10 +30,10 @@ private:
     QImage m_image;
     qint64 m_elapsed;
 
-    void updateUi();
     QString suggestTargetFileName();
+    void updateUi();
 
-private  slots:
+private  slots:     
     void openImage();
     void saveImage();
 };

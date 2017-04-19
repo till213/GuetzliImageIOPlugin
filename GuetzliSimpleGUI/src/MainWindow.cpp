@@ -8,6 +8,8 @@
 #include <QStandardPaths>
 #include <QElapsedTimer>
 #include <QCoreApplication>
+#include <QColorDialog>
+#include <QIcon>
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
@@ -31,6 +33,14 @@ MainWindow::~MainWindow()
 }
 
 // Private
+
+QString MainWindow::suggestTargetFileName()
+{
+    QString suggestedName;
+
+    suggestedName = QFileInfo(m_sourceFilePath).baseName() + ".jpg";
+    return suggestedName;
+}
 
 void MainWindow::updateUi()
 {
@@ -65,14 +75,6 @@ void MainWindow::updateUi()
         ui->durationLabel->setText(QString());
     }
 
-}
-
-QString MainWindow::suggestTargetFileName()
-{
-    QString suggestedName;
-
-    suggestedName = QFileInfo(m_sourceFilePath).baseName() + ".jpg";
-    return suggestedName;
 }
 
 // Private slots
@@ -139,13 +141,19 @@ void MainWindow::saveImage()
             QCoreApplication::processEvents();
 
             elapsedTimer.start();
-            imageWriter.write(m_image);
+            bool success = imageWriter.write(m_image);
             m_elapsed = elapsedTimer.elapsed();
-            ui->statusBar->showMessage(tr("Guetzli ready."), 5000);
+            if (success) {
+                ui->statusBar->showMessage(tr("Guetzli ready."), 5000);
+            } else {
+                ui->statusBar->showMessage(tr("Baking guetzli failed."), 5000);
+            }
+
             QApplication::restoreOverrideCursor();
 
         }
     }
     updateUi();
 }
+
 
