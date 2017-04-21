@@ -32,6 +32,7 @@ private:
 
     QString suggestTargetFileName();
     void updateUi();
+    bool hasGuetzliPlugin();
 
 private  slots:     
     void openImage();

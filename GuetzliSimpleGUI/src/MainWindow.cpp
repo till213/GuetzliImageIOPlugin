@@ -8,8 +8,8 @@
 #include <QStandardPaths>
 #include <QElapsedTimer>
 #include <QCoreApplication>
-#include <QColorDialog>
-#include <QIcon>
+#include <QMessageBox>
+#include <QByteArray>
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
@@ -25,6 +25,10 @@ MainWindow::MainWindow(QWidget *parent) :
         m_lastSourceDirectory = standardLocations[0];
     }
     updateUi();
+
+    if (!hasGuetzliPlugin()) {
+        QMessageBox::warning(this, tr("Guetzli Plugin Not Found"), tr("No Guetzli image plugin found."));
+    }
 }
 
 MainWindow::~MainWindow()
@@ -77,6 +81,23 @@ void MainWindow::updateUi()
 
 }
 
+bool MainWindow::hasGuetzliPlugin()
+{
+    QList<QByteArray> supportedFormats = QImageWriter::supportedImageFormats();
+    QByteArray guetzliFormat = QByteArray("guetzli");
+    bool hasGuetzli;
+
+    hasGuetzli = false;
+    for (QByteArray format : supportedFormats) {
+        if (guetzliFormat == format) {
+            hasGuetzli = true;
+            break;
+        }
+    }
+
+    return hasGuetzli;
+}
+
 // Private slots
 
 void MainWindow::openImage()
@@ -86,9 +107,9 @@ void MainWindow::openImage()
     if (!m_sourceFilePath.isNull()) {
 
         m_lastSourceDirectory = QFileInfo(m_sourceFilePath).absolutePath();
-        QImageReader reader(m_sourceFilePath);
-        m_sourceFormat = reader.format();
-        m_image = reader.read();
+        QImageReader imageReader(m_sourceFilePath);
+        m_sourceFormat = imageReader.format();
+        m_image = imageReader.read();
         if (!m_image.isNull()) {
 
             QImage previewImage;
