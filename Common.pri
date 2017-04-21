@@ -1,5 +1,7 @@
 CONFIG += c++11
 
+APP_NAME = GuetzliSimpleGUI
+
 # For unknown reasons to me FreeBSD 'make' trips over the mere existence
 # of a subdirectory called 'obj'. Also refer to e.g.
 # http://stackoverflow.com/questions/26002517/makefile-under-freebsd-does-not-compile-works-on-linux
