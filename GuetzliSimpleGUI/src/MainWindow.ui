@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
-    <height>463</height>
+    <width>649</width>
+    <height>458</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="4">
+    <item row="0" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QLabel" name="imagePreviewLabel">
@@ -158,39 +158,6 @@
      </layout>
     </item>
     <item row="1" column="0">
-     <widget class="QPushButton" name="openButton">
-      <property name="toolTip">
-       <string>Open image</string>
-      </property>
-      <property name="text">
-       <string>&amp;Open...</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QPushButton" name="saveButton">
-      <property name="toolTip">
-       <string>Save as guetzli image</string>
-      </property>
-      <property name="text">
-       <string>Save &amp;As...</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="2">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>487</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="1" column="3">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -203,6 +170,43 @@
       </property>
      </spacer>
     </item>
+    <item row="2" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QPushButton" name="openButton">
+        <property name="toolTip">
+         <string>Open image</string>
+        </property>
+        <property name="text">
+         <string>&amp;Open...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="saveButton">
+        <property name="toolTip">
+         <string>Save as guetzli image</string>
+        </property>
+        <property name="text">
+         <string>Save &amp;As...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>487</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -210,8 +214,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>700</width>
-     <height>22</height>
+     <width>649</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -223,7 +227,14 @@
     <addaction name="separator"/>
     <addaction name="quitAction"/>
    </widget>
+   <widget class="QMenu" name="menu_About">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="aboutQtAction"/>
+   </widget>
    <addaction name="fileMenu"/>
+   <addaction name="menu_About"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="openAction">
@@ -254,6 +265,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="aboutQtAction">
+   <property name="text">
+    <string>&amp;Qt</string>
    </property>
   </action>
  </widget>
@@ -340,9 +356,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>aboutQtAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>aboutQt()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>324</x>
+     <y>228</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openImage()</slot>
   <slot>saveImage()</slot>
+  <slot>aboutQt()</slot>
  </slots>
 </ui>

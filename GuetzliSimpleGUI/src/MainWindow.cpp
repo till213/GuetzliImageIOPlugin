@@ -177,4 +177,9 @@ void MainWindow::saveImage()
     updateUi();
 }
 
+void MainWindow::aboutQt()
+{
+    QApplication::aboutQt();
+}
+
 

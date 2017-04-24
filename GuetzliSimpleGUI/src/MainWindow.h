@@ -37,6 +37,7 @@ private:
 private  slots:     
     void openImage();
     void saveImage();
+    void aboutQt();
 };
 
 #endif // MAINWINDOW_H
