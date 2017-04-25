@@ -8,6 +8,7 @@
 #include <QColor>
 
 class QWidget;
+class PluginInfoDialog;
 
 namespace Ui {
 class MainWindow;
@@ -23,6 +24,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    PluginInfoDialog *m_pluginInfoDialog;
     QString m_lastSourceDirectory;
     QString m_sourceFilePath;
     QByteArray m_sourceFormat;
@@ -34,10 +36,14 @@ private:
     void updateUi();
     bool hasGuetzliPlugin();
 
-private  slots:     
+private  slots:
+    // File menu
     void openImage();
     void saveImage();
+
+    // Help menu
     void aboutQt();
+    void showPluginInfo();
 };
 
 #endif // MAINWINDOW_H

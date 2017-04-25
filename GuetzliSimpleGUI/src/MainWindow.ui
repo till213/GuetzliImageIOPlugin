@@ -232,6 +232,7 @@
      <string>&amp;Help</string>
     </property>
     <addaction name="aboutQtAction"/>
+    <addaction name="showPluginInfoAction"/>
    </widget>
    <addaction name="fileMenu"/>
    <addaction name="menu_About"/>
@@ -269,7 +270,12 @@
   </action>
   <action name="aboutQtAction">
    <property name="text">
-    <string>&amp;Qt</string>
+    <string>About &amp;Qt</string>
+   </property>
+  </action>
+  <action name="showPluginInfoAction">
+   <property name="text">
+    <string>&amp;Plugins...</string>
    </property>
   </action>
  </widget>
@@ -372,10 +378,27 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>showPluginInfoAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showPluginInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>324</x>
+     <y>228</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openImage()</slot>
   <slot>saveImage()</slot>
   <slot>aboutQt()</slot>
+  <slot>showPluginInfo()</slot>
  </slots>
 </ui>

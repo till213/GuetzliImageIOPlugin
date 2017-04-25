@@ -11,12 +11,14 @@
 #include <QMessageBox>
 #include <QByteArray>
 
+#include "PluginInfoDialog.h"
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    m_pluginInfoDialog(nullptr)
 {
     ui->setupUi(this);
 
@@ -34,6 +36,10 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    if (m_pluginInfoDialog != nullptr) {
+        delete m_pluginInfoDialog;
+        m_pluginInfoDialog = nullptr;
+    }
 }
 
 // Private
@@ -180,6 +186,14 @@ void MainWindow::saveImage()
 void MainWindow::aboutQt()
 {
     QApplication::aboutQt();
+}
+
+void MainWindow::showPluginInfo()
+{
+    if (m_pluginInfoDialog == nullptr) {
+       m_pluginInfoDialog = new PluginInfoDialog(this);
+    }
+    m_pluginInfoDialog->show();
 }
 
 
