@@ -31,6 +31,7 @@ void PluginInfoDialog::initUi()
     constexpr int FormatColumn = 0;
     constexpr int CanReadColumn = 1;
     constexpr int CanWriteColumn = 2;
+    constexpr int QualityColumn = 3;
 
     // Readers
     QList<QByteArray> supportedImageFormats = QImageReader::supportedImageFormats();
@@ -69,6 +70,22 @@ void PluginInfoDialog::initUi()
 
     }
     ui->pluginTableWidget->setSortingEnabled(true);
+
+    // Plugin details
+    for (int row = 0; row < ui->pluginTableWidget->rowCount(); ++row) {
+        QTableWidgetItem *canWriteItem = ui->pluginTableWidget->item(row, CanWriteColumn);
+        if (canWriteItem != nullptr) {
+            QTableWidgetItem *formatItem = ui->pluginTableWidget->item(row, FormatColumn);
+            QImageWriter imageWriter;
+            imageWriter.setFormat(formatItem->text().toLocal8Bit());
+            if (imageWriter.supportsOption(QImageIOHandler::ImageOption::Quality)) {
+                QTableWidgetItem *qualityItem = new QTableWidgetItem(tr("Yes"));
+                qualityItem->setCheckState(Qt::CheckState::Checked);
+                qualityItem->setFlags(qualityItem->flags()^= Qt::ItemIsEditable | Qt::ItemIsUserCheckable);
+                ui->pluginTableWidget->setItem(row, QualityColumn, qualityItem);
+            }
+        }
+    }
 
     // Library paths
     QStringList libraryPaths = QCoreApplication::libraryPaths();

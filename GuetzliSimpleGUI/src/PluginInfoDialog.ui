@@ -49,6 +49,11 @@
           <string>Write</string>
          </property>
         </column>
+        <column>
+         <property name="text">
+          <string>Quality</string>
+         </property>
+        </column>
        </widget>
       </item>
      </layout>
