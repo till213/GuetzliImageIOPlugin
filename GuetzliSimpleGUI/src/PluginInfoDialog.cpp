@@ -9,6 +9,17 @@
 #include "PluginInfoDialog.h"
 #include "ui_PluginInfoDialog.h"
 
+namespace
+{
+    constexpr int FormatColumn = 0;
+    constexpr int CanReadColumn = 1;
+    constexpr int CanWriteColumn = 2;
+    constexpr int SizeColumn = 3;
+    constexpr int QualityColumn = 4;
+    constexpr int NameColumn = 5;
+    constexpr int DescriptionColumn = 6;
+} // Anonymous
+
 // Public
 
 PluginInfoDialog::PluginInfoDialog(QWidget *parent) :
@@ -26,71 +37,116 @@ PluginInfoDialog::~PluginInfoDialog()
 
 // Private
 
+const QString &PluginInfoDialog::ReadText = tr("Read");
+const QString &PluginInfoDialog::WriteText = tr("Write");
+const QString &PluginInfoDialog::ReadWriteText = tr("Read/Write");
+const QString &PluginInfoDialog::YesText = tr("Yes");
+
 void PluginInfoDialog::initUi()
 {
-    constexpr int FormatColumn = 0;
-    constexpr int CanReadColumn = 1;
-    constexpr int CanWriteColumn = 2;
-    constexpr int QualityColumn = 3;
+    QTableWidgetItem *item;
 
     // Readers
     QList<QByteArray> supportedImageFormats = QImageReader::supportedImageFormats();
     for (QByteArray supportedImageFormat : supportedImageFormats) {
-        QTableWidgetItem *formatItem = new QTableWidgetItem(QString(supportedImageFormat).toUpper());
-        formatItem->setFlags(formatItem->flags()^= Qt::ItemIsEditable);
+        item = new QTableWidgetItem(QString(supportedImageFormat).toUpper());
+        item->setFlags(item->flags()^= Qt::ItemIsEditable);
         int currentRowCount = ui->pluginTableWidget->rowCount();
         ui->pluginTableWidget->insertRow(currentRowCount);
-        ui->pluginTableWidget->setItem(currentRowCount, FormatColumn, formatItem);
+        ui->pluginTableWidget->setItem(currentRowCount, ::FormatColumn, item);
 
-        QTableWidgetItem *canReadItem = new QTableWidgetItem(tr("Yes"));
-        canReadItem->setCheckState(Qt::CheckState::Checked);
-        canReadItem->setFlags(canReadItem->flags()^= Qt::ItemIsEditable | Qt::ItemIsUserCheckable);
-        ui->pluginTableWidget->setItem(currentRowCount, CanReadColumn, canReadItem);
+        item = createCheckedReadOnlyItem();
+        ui->pluginTableWidget->setItem(currentRowCount, ::CanReadColumn, item);
     }
 
     // Writers
     supportedImageFormats = QImageWriter::supportedImageFormats();
     for (QByteArray supportedImageFormat : supportedImageFormats) {
-
-        QTableWidgetItem *canWriteItem = new QTableWidgetItem(tr("Yes"));
-        canWriteItem->setCheckState(Qt::CheckState::Checked);
-        canWriteItem->setFlags(canWriteItem->flags()^= Qt::ItemIsEditable | Qt::ItemIsUserCheckable);
-
         int row = findFormat(supportedImageFormat);
         if (row >= 0) {
-           ui->pluginTableWidget->setItem(row, CanWriteColumn, canWriteItem);
+            item = createCheckedReadOnlyItem();
+            ui->pluginTableWidget->setItem(row, CanWriteColumn, item);
         } else {
-            QTableWidgetItem *formatItem = new QTableWidgetItem(QString(supportedImageFormat).toUpper());
-            formatItem->setFlags(formatItem->flags() ^= Qt::ItemIsEditable);
+            item = new QTableWidgetItem(QString(supportedImageFormat).toUpper());
+            item->setFlags(item->flags() ^= Qt::ItemIsEditable);
             int currentRowCount = ui->pluginTableWidget->rowCount();
             ui->pluginTableWidget->insertRow(currentRowCount);
-            ui->pluginTableWidget->setItem(currentRowCount, FormatColumn, formatItem);
-            ui->pluginTableWidget->setItem(currentRowCount, CanWriteColumn, canWriteItem);
+            ui->pluginTableWidget->setItem(currentRowCount, ::FormatColumn, item);
+            item = createCheckedReadOnlyItem();
+            ui->pluginTableWidget->setItem(currentRowCount, ::CanWriteColumn, item);
         }
-
     }
+
+    initPluginDetails();
     ui->pluginTableWidget->setSortingEnabled(true);
-
-    // Plugin details
-    for (int row = 0; row < ui->pluginTableWidget->rowCount(); ++row) {
-        QTableWidgetItem *canWriteItem = ui->pluginTableWidget->item(row, CanWriteColumn);
-        if (canWriteItem != nullptr) {
-            QTableWidgetItem *formatItem = ui->pluginTableWidget->item(row, FormatColumn);
-            QImageWriter imageWriter;
-            imageWriter.setFormat(formatItem->text().toLocal8Bit());
-            if (imageWriter.supportsOption(QImageIOHandler::ImageOption::Quality)) {
-                QTableWidgetItem *qualityItem = new QTableWidgetItem(tr("Yes"));
-                qualityItem->setCheckState(Qt::CheckState::Checked);
-                qualityItem->setFlags(qualityItem->flags()^= Qt::ItemIsEditable | Qt::ItemIsUserCheckable);
-                ui->pluginTableWidget->setItem(row, QualityColumn, qualityItem);
-            }
-        }
-    }
 
     // Library paths
     QStringList libraryPaths = QCoreApplication::libraryPaths();
     for (QString libraryPath : libraryPaths) {
         ui->pluginPathListWidget->addItem(QDir::toNativeSeparators(libraryPath));
+    }
+}
+
+void PluginInfoDialog::initPluginDetails()
+{
+    QTableWidgetItem *item;
+
+    // Plugin details
+    for (int row = 0; row < ui->pluginTableWidget->rowCount(); ++row) {
+        // Read properties
+        item = ui->pluginTableWidget->item(row, ::CanReadColumn);
+        if (item != nullptr) {
+            QImageReader imageReader;
+            imageReader.setFormat(item->text().toLocal8Bit());
+            // Size
+            if (imageReader.supportsOption(QImageIOHandler::ImageOption::Size)) {
+                item = createCheckedReadOnlyItem();
+                ui->pluginTableWidget->setItem(row, ::SizeColumn, item);
+            }
+            // Name
+            if (imageReader.supportsOption(QImageIOHandler::ImageOption::Name)) {
+                item = createCheckedReadOnlyItem(ReadText);
+                ui->pluginTableWidget->setItem(row, ::NameColumn, item);
+            }
+            // Description
+            if (imageReader.supportsOption(QImageIOHandler::ImageOption::Description)) {
+                item = createCheckedReadOnlyItem(ReadText);
+                ui->pluginTableWidget->setItem(row, ::DescriptionColumn, item);
+            }
+        }
+
+        // Write properties
+        item = ui->pluginTableWidget->item(row, CanWriteColumn);
+        if (item != nullptr) {
+            item = ui->pluginTableWidget->item(row, ::FormatColumn);
+            QImageWriter imageWriter;
+            imageWriter.setFormat(item->text().toLocal8Bit());
+            // Quality (write)
+            if (imageWriter.supportsOption(QImageIOHandler::ImageOption::Quality)) {
+                item = createCheckedReadOnlyItem();
+                ui->pluginTableWidget->setItem(row, ::QualityColumn, item);
+            }
+            // Name
+            if (imageWriter.supportsOption(QImageIOHandler::ImageOption::Name)) {
+                item = ui->pluginTableWidget->item(row, ::NameColumn);
+                if (item != nullptr) {
+                    item->setText(tr("Read/Write"));
+                } else {
+                    item = createCheckedReadOnlyItem(tr("Write"));
+                    ui->pluginTableWidget->setItem(row, ::NameColumn, item);
+                }
+            }
+            // Description
+            if (imageWriter.supportsOption(QImageIOHandler::ImageOption::Description)) {
+                item = ui->pluginTableWidget->item(row, ::DescriptionColumn);
+                if (item != nullptr) {
+                    item->setText(tr("Read/Write"));
+                } else {
+                    item = createCheckedReadOnlyItem(tr("Write"));
+                    ui->pluginTableWidget->setItem(row, ::DescriptionColumn, item);
+                }
+            }
+        }
     }
 }
 
@@ -108,3 +164,12 @@ int PluginInfoDialog::findFormat(const QByteArray &format)
     }
     return row;
 }
+
+QTableWidgetItem *PluginInfoDialog::createCheckedReadOnlyItem(const QString &text)
+{
+    QTableWidgetItem *item = new QTableWidgetItem(text);
+    item->setCheckState(Qt::CheckState::Checked);
+    item->setFlags(item->flags()^= Qt::ItemIsEditable | Qt::ItemIsUserCheckable);
+    return item;
+}
+

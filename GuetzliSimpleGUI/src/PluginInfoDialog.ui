@@ -51,7 +51,22 @@
         </column>
         <column>
          <property name="text">
-          <string>Quality</string>
+          <string>Size (Read)</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Quality (Write)</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Name</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Description</string>
          </property>
         </column>
        </widget>
