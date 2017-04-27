@@ -31,6 +31,10 @@ private:
     void initPluginDetails();
     int findFormat(const QByteArray &format);
     QTableWidgetItem *createCheckedReadOnlyItem(const QString &text = tr("Yes"));
+
+private slots:
+    void updateUi();
+    void showPluginDirectory();
 };
 
 #endif // PLUGININFODIALOG_H

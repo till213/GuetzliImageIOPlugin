@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>457</width>
-    <height>263</height>
+    <width>686</width>
+    <height>334</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -89,6 +89,30 @@
       <item row="0" column="0">
        <widget class="QListWidget" name="pluginPathListWidget"/>
       </item>
+      <item row="1" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="showPushButton">
+          <property name="text">
+           <string>&amp;Show...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
      </layout>
     </widget>
    </item>
@@ -138,5 +162,41 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>showPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PluginInfoDialog</receiver>
+   <slot>showPluginDirectory()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>628</x>
+     <y>273</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>342</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginPathListWidget</sender>
+   <signal>itemSelectionChanged()</signal>
+   <receiver>PluginInfoDialog</receiver>
+   <slot>updateUi()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>342</x>
+     <y>218</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>342</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>showPluginDirectory()</slot>
+  <slot>updateUi()</slot>
+ </slots>
 </ui>

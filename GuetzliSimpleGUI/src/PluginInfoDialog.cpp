@@ -5,6 +5,8 @@
 #include <QImageReader>
 #include <QImageWriter>
 #include <QDir>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include "PluginInfoDialog.h"
 #include "ui_PluginInfoDialog.h"
@@ -28,6 +30,7 @@ PluginInfoDialog::PluginInfoDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     initUi();
+    updateUi();
 }
 
 PluginInfoDialog::~PluginInfoDialog()
@@ -171,5 +174,19 @@ QTableWidgetItem *PluginInfoDialog::createCheckedReadOnlyItem(const QString &tex
     item->setCheckState(Qt::CheckState::Checked);
     item->setFlags(item->flags()^= Qt::ItemIsEditable | Qt::ItemIsUserCheckable);
     return item;
+}
+
+// Private slots
+
+void PluginInfoDialog::updateUi()
+{
+    bool hasItems = ui->pluginPathListWidget->selectedItems().count() > 0;
+    ui->showPushButton->setEnabled(hasItems);
+}
+
+void PluginInfoDialog::showPluginDirectory()
+{
+    QString path = ui->pluginPathListWidget->selectedItems().first()->text();
+    QDesktopServices::openUrl(QUrl(QString("file:///") + QDir::fromNativeSeparators(path), QUrl::TolerantMode));
 }
 
