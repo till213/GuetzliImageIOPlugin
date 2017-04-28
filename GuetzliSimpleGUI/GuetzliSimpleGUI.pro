@@ -13,5 +13,7 @@ win32 {
     RC_ICONS = res/GuetzliIcon.ico
 }
 
+OTHER_FILES += res/GuetzliIcon.xcf \
+               res/GuetzliIcon.ico
 
 
