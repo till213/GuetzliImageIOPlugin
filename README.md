@@ -1,3 +1,5 @@
+<p align="center"><img src="https://cloud.githubusercontent.com/assets/203457/24553916/1f3f88b6-162c-11e7-990a-731b2560f15c.png" alt="Guetzli" width="64"></p>
+
 # GuetzliImageIOPlugin
 
 A Qt image plugin (QImageIOPlugin) for the [Google guetzli JPEG encoder](https://github.com/google/guetzli).
@@ -11,6 +13,8 @@ This plugin incorporates the Google guetzli code into a [QImageIOPlugin](http://
 for easy use in [Qt](https://www.qt.io/) based applications.
 
 A simple GUI (__SimpleGuetzliGUI__) for testing the plugin is provided, too.
+
+![Simple GuetzliGUI](https://github.com/till213/GuetzliImageIOPlugin/raw/master/doc/img/simpleguetzligui.png "Simple GuetzliGUI on FreeBSD")
 
 # Cloning
 
@@ -126,7 +130,7 @@ int main(int argc, char *argv[])
   imageWriter.setFileName("guetzli.jpg");
 
   // The plugin format identifier is simply "guetzli"
-  imageWriter.setFormat("guetzli");
+  imageWriter.setFormat("GUETZLI");
 
   // The default quality is set to 85, the lowest possible value is 84
   imageWriter.setQuality(90);
@@ -149,7 +153,7 @@ QImage image;
 
 ...
 
-bool success = image.save("guetzli.jpg", "guetzli", 90);
+bool success = image.save("guetzli.jpg", "GUETZLI", 90);
 ```
 
 Deploy the GuetzliImageIOPlugin together with your application in a subdirectory called __imageformats__.
