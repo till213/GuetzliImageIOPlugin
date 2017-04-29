@@ -111,7 +111,6 @@ void MainWindow::updateUi()
         ui->targetSizeLabel->setText(QString());
         ui->durationLabel->setText(QString());
     }
-
 }
 
 bool MainWindow::hasGuetzliPlugin()

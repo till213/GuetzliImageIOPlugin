@@ -83,9 +83,23 @@ qmake -r CONFIG+=debug
 make
 ```
 
+## Build Options
+
+By default images with an alpha channel are first blended against a black
+background before being encoded to JPEG with the Guetzli encoder.
+
+This behaviour can be controlled by setting the environment variable
+__GUETZLI_BLEND_MODE__ in the project include __Common.pri__:
+
+GUETZLI_BLEND_MODE | Behaviour |
+----------- | :-------------------- |
+1 (default) | Image is blended against a black background
+2           | Image is blended against a white background
+3           | Alpha channel is ignored (Qt does this when saving JPEG data)
+
 # Installation to Qt Plugin Directory
 
-If you want to install the plugin into the Qt image format plugin directory you can install it as follows:
+If you want to install the plugin into the Qt image format plugin directory y ou can install it as follows:
 
 ```
 make install
