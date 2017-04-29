@@ -10,7 +10,7 @@ Read more about it on the [Google Research Blog](https://research.googleblog.com
 This plugin incorporates the Google guetzli code into a [QImageIOPlugin](http://doc.qt.io/qt-5/qimageioplugin.html)
 for easy use in [Qt](https://www.qt.io/) based applications.
 
-A simple GUI (__GuetzliSimpleGUI__) for testing the plugin is provided, too.
+A simple GUI (__SimpleGuetzliGUI__) for testing the plugin is provided, too.
 
 # Cloning
 
@@ -58,7 +58,7 @@ mingw32-make.exe
 Alternatively you can open the top-level __GuetzliImageIOPlugin.pro__ file in Qt Creator
 and build the projects as usual, for instance with __CTRL + B__ (__CMD + B__ on macOS).
 
-This will build all projects, including the GuetzliImageIOPlugin and the GuetzliSimpleGUI.
+This will build all projects, including the GuetzliImageIOPlugin and the SimpleGuetzliGUI.
 
 The GuetzliImageIOPlugin will be located at
 
@@ -66,7 +66,7 @@ The GuetzliImageIOPlugin will be located at
 bin/release/imageformats
 ```
 
-and the GuetzliSimpleGUI will be located at
+and the SimpleGuetzliGUI will be located at
 
 ```
 bin/release

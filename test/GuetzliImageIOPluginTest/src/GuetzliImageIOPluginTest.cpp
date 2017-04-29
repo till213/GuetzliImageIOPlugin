@@ -345,8 +345,8 @@ void GuetzliImageIOPluginTest::createTestData(const QSize &size, int quality)
 void GuetzliImageIOPluginTest::initTestCase()
 {
     if (QSysInfo::macVersion() != QSysInfo::MV_None) {
-        // The guetzli plugin is in the GuetzliSimpleGUI application bundle
-        QString applicationPluginDirectory = QCoreApplication::applicationDirPath() + "/GuetzliSimpleGUI.app/Contents/plugins";
+        // The guetzli plugin is in the SimpleGuetzliGUI application bundle
+        QString applicationPluginDirectory = QCoreApplication::applicationDirPath() + "/SimpleGuetzliGUI.app/Contents/plugins";
         QCoreApplication::addLibraryPath(applicationPluginDirectory);
     }
 

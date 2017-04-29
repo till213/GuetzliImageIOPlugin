@@ -1,6 +1,6 @@
 CONFIG += c++11
 
-APP_NAME = GuetzliSimpleGUI
+APP_NAME = SimpleGuetzliGUI
 
 # Set the background color for images with alpha channel:
 # 1: the image is blended against black (the original guetzli encoder does that - default)
