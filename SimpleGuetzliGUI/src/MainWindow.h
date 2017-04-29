@@ -9,6 +9,8 @@
 
 class QWidget;
 class PluginInfoDialog;
+class QDragEnterEvent;
+class QDragLeaveEvent;
 
 namespace Ui {
 class MainWindow;
@@ -19,8 +21,14 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = nullptr);
     virtual ~MainWindow();
+
+protected:
+
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dragLeaveEvent(QDragLeaveEvent *event);
+    virtual void dropEvent(QDropEvent *event);
 
 private:
     Ui::MainWindow *ui;
@@ -35,6 +43,7 @@ private:
     QString suggestTargetFileName();
     void updateUi();
     bool hasGuetzliPlugin();
+    void openImage(const QString &filePath);
 
 private  slots:
     // File menu

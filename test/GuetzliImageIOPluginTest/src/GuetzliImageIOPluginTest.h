@@ -26,9 +26,12 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
-    void checkGuetzliPlugin();
+    void checkGuetzliPlugin();    
     void compareWithReference_data();
     void compareWithReference();
+    void benchmark_data();
+    void benchmark();
+
 };
 
 

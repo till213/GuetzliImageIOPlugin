@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
   imageWriter.setFileName("guetzli.jpg");
 
   // The plugin format identifier is simply "guetzli"
-  imageWriter.setFormat("GUETZLI");
+  imageWriter.setFormat("guetzli");
 
   // The default quality is set to 85, the lowest possible value is 84
   imageWriter.setQuality(90);
@@ -153,7 +153,7 @@ QImage image;
 
 ...
 
-bool success = image.save("guetzli.jpg", "GUETZLI", 90);
+bool success = image.save("guetzli.jpg", "guetzli", 90);
 ```
 
 Deploy the GuetzliImageIOPlugin together with your application in a subdirectory called __imageformats__.

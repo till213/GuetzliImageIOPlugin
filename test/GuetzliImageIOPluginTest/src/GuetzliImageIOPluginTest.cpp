@@ -12,6 +12,16 @@ namespace {
     // Set to true in order to write test images to disk; helpful
     // for debugging
     constexpr bool WriteImagesToDisk = false;
+
+    constexpr int MinimumQuality = 84;
+    constexpr int HighQuality = 90;
+    constexpr int MaxQuality = 100;
+    constexpr int DefaultQuality = -1;
+
+    constexpr QSize SmallSize = {32, 48};
+    constexpr QSize OddSize = {201, 157};
+    constexpr QSize LargeSize = {256, 256};
+
 } // anonymous
 
 // Private
@@ -392,26 +402,19 @@ void GuetzliImageIOPluginTest::checkGuetzliPlugin()
 
 void GuetzliImageIOPluginTest::compareWithReference_data()
 {
-    constexpr int MinimumQuality = 84;
-    constexpr int HighQuality = 90;
-    constexpr int MaxQuality = 100;
-    constexpr int DefaultQuality = -1;
-    QVector<int> qualities = {MinimumQuality, HighQuality, MaxQuality, DefaultQuality};
-    constexpr QSize SmallSize = {32, 48};
-    constexpr QSize OddSize = {201, 157};
-    constexpr QSize LargeSize = {256, 256};
-    QVector<QSize> sizes = {SmallSize, OddSize, LargeSize};
+    const QVector<int> qualities = {::MinimumQuality, ::HighQuality, ::MaxQuality, ::DefaultQuality};
+    const QVector<QSize> sizes = {::SmallSize, ::OddSize, ::LargeSize};
 
     QTest::addColumn<QImage>("sourceImage");
     QTest::addColumn<int>("quality");
     QTest::addColumn<QImage>("expectedImage");
 
-    for (QSize size : sizes) {
+    for (const QSize size : sizes) {
         // Test patterns
         createTestData(size, HighQuality);
     }
 
-    for (int quality : qualities) {
+    for (const int quality : qualities) {
         // Test patterns
         createTestData(SmallSize, quality);
 
@@ -450,7 +453,7 @@ void GuetzliImageIOPluginTest::compareWithReference()
 
     // Verify
     QImage actualImage;
-    actualImage.loadFromData(buffer.data(), "JPG");
+    actualImage.loadFromData(buffer.data(), "jpg");
     buffer.close();
 
     if (WriteImagesToDisk) {
@@ -463,5 +466,37 @@ void GuetzliImageIOPluginTest::compareWithReference()
     QVERIFY2(actualImage.size() == expectedImage.size(), "Same size as expected image");
     QVERIFY2(compareImages(actualImage, expectedImage, quality), "Image sufficiently similar to expected reference image");
 }
+
+void GuetzliImageIOPluginTest::benchmark_data()
+{
+    const QVector<int> qualities = {::MinimumQuality, ::HighQuality, ::MaxQuality};
+
+    QTest::addColumn<QImage>("image");
+    QTest::addColumn<int>("quality");
+    for (const int quality : qualities) {
+        // Photo 1
+        QImage image = QImage(":/img/Los Angeles.png");
+        QTest::newRow(QString("Los Angeles-%1x%2-q%3").arg(image.width()).arg(image.height()).arg(quality).toLatin1())
+                << image << quality;
+    }
+}
+
+void GuetzliImageIOPluginTest::benchmark()
+{
+    // Setup
+    QFETCH(QImage, image);
+    QFETCH(int, quality);
+
+    QBuffer buffer;
+    buffer.open(QBuffer::ReadWrite);
+
+    // Exercise
+    QBENCHMARK {
+        image.save(&buffer, "guetzli", quality);
+    }
+
+    buffer.close();
+}
+
 
 QTEST_MAIN(GuetzliImageIOPluginTest)

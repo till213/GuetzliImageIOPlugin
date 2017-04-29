@@ -10,6 +10,10 @@
 #include <QCoreApplication>
 #include <QMessageBox>
 #include <QByteArray>
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
+#include <QDropEvent>
+#include <QMimeData>
 
 #include "PluginInfoDialog.h"
 #include "MainWindow.h"
@@ -21,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_pluginInfoDialog(nullptr)
 {
     ui->setupUi(this);
+    this->setAcceptDrops(true);
 
     QStringList standardLocations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
     if (standardLocations.size() > 0) {
@@ -42,13 +47,35 @@ MainWindow::~MainWindow()
     }
 }
 
+// Protected
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    const QMimeData *mimeData = event->mimeData();
+    if(mimeData->hasUrls()) {
+        event->accept();
+    }
+}
+
+void MainWindow::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    Q_UNUSED(event);
+}
+
+void MainWindow::dropEvent(QDropEvent *event)
+{
+    const QMimeData *mimeData = event->mimeData();
+    if(mimeData->hasUrls()) {
+        m_sourceFilePath = mimeData->urls().first().toLocalFile();
+        openImage(m_sourceFilePath);
+    }
+}
+
 // Private
 
 QString MainWindow::suggestTargetFileName()
 {
-    QString suggestedName;
-
-    suggestedName = QFileInfo(m_sourceFilePath).baseName() + ".jpg";
+    QString suggestedName = QFileInfo(m_sourceFilePath).baseName() + ".jpg";
     return suggestedName;
 }
 
@@ -104,6 +131,32 @@ bool MainWindow::hasGuetzliPlugin()
     return hasGuetzli;
 }
 
+void MainWindow::openImage(const QString &filePath)
+{
+    QImageReader imageReader(filePath);
+    m_sourceFormat = imageReader.format();
+    m_image = imageReader.read();
+    if (!m_image.isNull()) {
+
+        QImage previewImage;
+        if (m_image.width() > ui->imagePreviewLabel->maximumWidth() ||
+            m_image.height() > ui->imagePreviewLabel->maximumHeight()
+           ) {
+            if (m_image.width() > m_image.height()) {
+                previewImage = m_image.scaledToWidth(ui->imagePreviewLabel->maximumWidth());
+            } else {
+                previewImage = m_image.scaledToHeight(ui->imagePreviewLabel->maximumHeight());
+            }
+        } else {
+            previewImage = m_image;
+        }
+        ui->imagePreviewLabel->setPixmap(QPixmap::fromImage(previewImage));
+    } else {
+        m_sourceFormat = "";
+    }
+    updateUi();
+}
+
 // Private slots
 
 void MainWindow::openImage()
@@ -111,31 +164,9 @@ void MainWindow::openImage()
     QString filter("Images (*.png *.tif *.tiff *.jpg *.jpeg);;PNG (*.png);;TIFF (*.tif *.tiff);; JPEG (*.jpg *.jpeg)");
     m_sourceFilePath = QFileDialog::getOpenFileName(this, tr("Open"), m_lastSourceDirectory, filter);
     if (!m_sourceFilePath.isNull()) {
-
         m_lastSourceDirectory = QFileInfo(m_sourceFilePath).absolutePath();
-        QImageReader imageReader(m_sourceFilePath);
-        m_sourceFormat = imageReader.format();
-        m_image = imageReader.read();
-        if (!m_image.isNull()) {
-
-            QImage previewImage;
-            if (m_image.width() > ui->imagePreviewLabel->maximumWidth() ||
-                m_image.height() > ui->imagePreviewLabel->maximumHeight()
-               ) {
-                if (m_image.width() > m_image.height()) {
-                    previewImage = m_image.scaledToWidth(ui->imagePreviewLabel->maximumWidth());
-                } else {
-                    previewImage = m_image.scaledToHeight(ui->imagePreviewLabel->maximumHeight());
-                }
-            } else {
-                previewImage = m_image;
-            }
-            ui->imagePreviewLabel->setPixmap(QPixmap::fromImage(previewImage));
-        } else {
-            m_sourceFormat = "";
-        }
+        openImage(m_sourceFilePath);
     }
-    updateUi();
 }
 
 void MainWindow::saveImage()
