@@ -1,14 +1,14 @@
 TEMPLATE = subdirs
-SUBDIRS = GuetzliSimpleGUI GuetzliLib GuetzliImageIOPlugin GuetzliImageIOPluginTest  #Guetzli
+SUBDIRS = SimpleGuetzliGUI GuetzliLib GuetzliImageIOPlugin GuetzliImageIOPluginTest  #Guetzli
 
 # Build the GUI first, in order to place the plugin into the application package (macOS)
 # later on
-GuetzliSimpleGUI.subdir = GuetzliSimpleGUI
+SimpleGuetzliGUI.subdir = SimpleGuetzliGUI
 
 GuetzliLib.subdir = GuetzliLib
 # Not a real code dependency: we just want to make sure that the GUI is built first,
 # in order to place the plugin binary into the application package (macOS)
-GuetzliImageIOPlugin.depends = GuetzliSimpleGUI
+GuetzliImageIOPlugin.depends = SimpleGuetzliGUI
 
 GuetzliImageIOPlugin.subdir = GuetzliImageIOPlugin
 GuetzliImageIOPlugin.depends = GuetzliLib

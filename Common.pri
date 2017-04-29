@@ -1,6 +1,12 @@
 CONFIG += c++11
 
-APP_NAME = GuetzliSimpleGUI
+APP_NAME = SimpleGuetzliGUI
+
+# Set the background color for images with alpha channel:
+# 1: the image is blended against black (the original guetzli encoder does that - default)
+# 2: the image is blended against white (the Yang for the above Yin)
+# 3: the alpha channel is ignored (Qt does that e.g. when saving JPEG data)
+DEFINES += GUETZLI_BLEND_MODE=1
 
 # For unknown reasons to me FreeBSD 'make' trips over the mere existence
 # of a subdirectory called 'obj'. Also refer to e.g.

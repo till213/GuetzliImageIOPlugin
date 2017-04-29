@@ -14,17 +14,39 @@
 namespace
 {
 
-#if !defined(GUETZLI_BLEND_MODE) || (GUETZLI_BLEND_MODE == 1)
+#if !defined(GUETZLI_BLEND_MODE) || (GUETZLI_BLEND_MODE == 1) // Blend on black background (default)
 inline uint8_t blendOnBackground(uint8_t val, uint8_t alpha) {
     return (static_cast<int>(val) * static_cast<int>(alpha) + 128) / 255;
 }
 
-#elif GUETZLI_BLEND_MODE == 2
+inline uint8_t blendPremultipliedOnBackground(uint8_t val, uint8_t alpha) {
+    Q_UNUSED(alpha)
+    return val;
+}
+
+#elif GUETZLI_BLEND_MODE == 2 // Blend on white background
 
 inline uint8_t blendOnBackground(uint8_t val, uint8_t alpha) {
     return (static_cast<int>(val) * static_cast<int>(alpha) + 255 * (255 - alpha) + 128) / 255;
 }
 
+inline uint8_t blendPremultipliedOnBackground(uint8_t val, uint8_t alpha) {
+    return val + (255 * (255 - alpha) + 128) / 255;
+}
+
+#elif GUETZLI_BLEND_MODE == 3 // Ignore alpha
+
+inline uint8_t blendOnBackground(uint8_t val, uint8_t alpha) {
+    Q_UNUSED(alpha) // alpha is ignored
+    return val;
+}
+
+inline uint8_t blendPremultipliedOnBackground(uint8_t val, uint8_t alpha) {
+    Q_UNUSED(alpha) // alpha is ignored and
+    return val;     // premultiplied value is returned "as is"
+}
+#else
+#error "Unsupported blend mode - see DEFINES in Common.pri"
 #endif
 
 } // anonymous
@@ -147,6 +169,22 @@ void GuetzliImageIOHandler::fetchRGB(const QImage &image, std::vector<uint8_t> *
             *rgbp++ = ::blendOnBackground(r, a);
             *rgbp++ = ::blendOnBackground(g, a);
             *rgbp++ = ::blendOnBackground(b, a);
+        }
+        break;
+
+    case QImage::Format_ARGB32_Premultiplied:
+
+        for (int i = 0; i < size; i++) {
+            // 0xAARRGGBB
+            uint8_t b = *bits++;
+            uint8_t g = *bits++;
+            uint8_t r = *bits++;
+            uint8_t a = *bits++;
+
+            // Convert to RGB888
+            *rgbp++ = ::blendPremultipliedOnBackground(r, a);
+            *rgbp++ = ::blendPremultipliedOnBackground(g, a);
+            *rgbp++ = ::blendPremultipliedOnBackground(b, a);
         }
         break;
 
