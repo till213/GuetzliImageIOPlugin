@@ -62,19 +62,27 @@ mingw32-make.exe
 Alternatively you can open the top-level __GuetzliImageIOPlugin.pro__ file in Qt Creator
 and build the projects as usual, for instance with __CTRL + B__ (__CMD + B__ on macOS).
 
-This will build all projects, including the GuetzliImageIOPlugin and the SimpleGuetzliGUI.
+This will build all projects, including the __GuetzliImageIOPlugin__ and the __SimpleGuetzliGUI__.
 
-The GuetzliImageIOPlugin will be located at
+The __GuetzliImageIOPlugin__(macOS see below) will be located at
 
 ```
 bin/release/imageformats
 ```
-
-and the SimpleGuetzliGUI will be located at
+and the __SimpleGuetzliGUI__ will be located at
 
 ```
 bin/release
 ```
+
+On __macOS__ the plugin is directly copied into the application bundle __SimpleGuetzliGUI__,
+for convenience:
+
+```
+bin/release/SimpleGuetzliGUI.app/Contents/plugins/imageformats
+```
+
+Like this the plugin is directly found by the application.
 
 ## Debug Build
 
@@ -86,10 +94,11 @@ make
 ## Build Options
 
 By default images with an alpha channel are first blended against a black
-background before being encoded to JPEG with the Guetzli encoder.
+background before being encoded to JPEG with the Guetzli encoder. The original
+Google command line __guetzli__ encoder does this as well.
 
 This behaviour can be controlled by setting the environment variable
-__GUETZLI_BLEND_MODE__ in the project include __Common.pri__:
+__GUETZLI_BLEND_MODE__ in the project include __Common.pri__ prior to (re-)compiling:
 
 GUETZLI_BLEND_MODE | Behaviour |
 ----------- | :-------------------- |
@@ -123,6 +132,7 @@ Platform    | Image Plugin Location |
 ----------- | :-------------------- |
 macOS       | ~/Qt5.6.2/5.6/clang_64/plugins/imageformats/libGuetzliImageIOPlugin.dylib
 Windows     | C:\Qt\Qt5.6.2\5.6\mingw49_32\plugins\imageformats\GuetzliIOPlugin.dll
+FreeBSD     | /usr/local/lib/qt5/plugins/imageformats/libGuetzliImageIOPlugin.so
 
 # Usage
 

@@ -17,7 +17,6 @@ VERSION=0.1
 win32 {
     RC_ICONS = res/GuetzliIcon.ico
 }
-
 macx {
     iconset.target = iconset
     iconset.commands = iconutil -c icns $$PWD/res/GuetzliIcon.iconset

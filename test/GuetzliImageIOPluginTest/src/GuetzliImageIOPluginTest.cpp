@@ -191,8 +191,8 @@ bool GuetzliImageIOPluginTest::compareImages(const QImage &actualImage, const QI
     // Heuristically evaluated threshold such that small size, low quality (q=84)
     // guetzli images still pass the test:
     // Quality 84: Threshold 100.0f
-    // Quality 100: Threshold 40.0f
-    const float MseThreshold = 100.0f - (60.0f - 60.0f * (1.0f - ((quality - 84.0f) / 16.0f)));
+    // Quality 100: Threshold 45.0f
+    const float MseThreshold = 100.0f - (55.0f - 55.0f * (1.0f - ((quality - 84.0f) / 16.0f)));
 
     mseRed = mseGreen = mseBlue = mseAlpha = 0.0f;
     for (int y = 0; y < actualImage.height(); ++y) {
