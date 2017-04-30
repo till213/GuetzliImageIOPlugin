@@ -75,7 +75,7 @@ bool GuetzliImageIOHandler::write(const QImage &image)
     guetzli::ProcessStats stats;
     guetzli::Params params;
 
-    QVariant quality = this->option(ImageOption::Quality);
+    QVariant quality = option(ImageOption::Quality);
     int qualityValue;
     if (quality.isValid()) {
         qualityValue = quality.toInt();
@@ -116,9 +116,17 @@ void GuetzliImageIOHandler::setOption(ImageOption option, const QVariant &value)
 {
     switch (option) {
     case ImageOption::Quality:
+    {
         // By default the guetzli encoder expects a minimum quality of 84
-        m_quality = qBound(84, value.toInt(), 100);
+        int val = value.toInt();
+        if (val != -1) {
+            m_quality = qBound(84, val, 100);
+        } else {
+            m_quality = GuetzliImageIOHandler::DefaultQuality;
+        }
+
         break;
+    }
     default:
         QImageIOHandler::setOption(option, value);
         break;

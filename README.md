@@ -108,7 +108,7 @@ GUETZLI_BLEND_MODE | Behaviour |
 
 # Installation to Qt Plugin Directory
 
-If you want to install the plugin into the Qt image format plugin directory y ou can install it as follows:
+The plugin is installed into the (system) Qt image format plugin directory as follows:
 
 ```
 make install
