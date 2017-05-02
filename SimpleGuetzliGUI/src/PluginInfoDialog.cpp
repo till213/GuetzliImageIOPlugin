@@ -133,9 +133,9 @@ void PluginInfoDialog::initPluginDetails()
             if (imageWriter.supportsOption(QImageIOHandler::ImageOption::Name)) {
                 item = ui->pluginTableWidget->item(row, ::NameColumn);
                 if (item != nullptr) {
-                    item->setText(tr("Read/Write"));
+                    item->setText(ReadWriteText);
                 } else {
-                    item = createCheckedReadOnlyItem(tr("Write"));
+                    item = createCheckedReadOnlyItem(WriteText);
                     ui->pluginTableWidget->setItem(row, ::NameColumn, item);
                 }
             }
@@ -143,9 +143,9 @@ void PluginInfoDialog::initPluginDetails()
             if (imageWriter.supportsOption(QImageIOHandler::ImageOption::Description)) {
                 item = ui->pluginTableWidget->item(row, ::DescriptionColumn);
                 if (item != nullptr) {
-                    item->setText(tr("Read/Write"));
+                    item->setText(ReadWriteText);
                 } else {
-                    item = createCheckedReadOnlyItem(tr("Write"));
+                    item = createCheckedReadOnlyItem(WriteText);
                     ui->pluginTableWidget->setItem(row, ::DescriptionColumn, item);
                 }
             }

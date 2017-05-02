@@ -11,6 +11,7 @@ class QWidget;
 class PluginInfoDialog;
 class QDragEnterEvent;
 class QDragLeaveEvent;
+class QSize;
 
 namespace Ui {
 class MainWindow;
@@ -40,12 +41,18 @@ private:
     QImage m_image;
     qint64 m_elapsed;
 
+    static const QString &BlackText;
+    static const QString &WhiteText;
+    static const QString &IgnoreAlphaText;
+
     QString suggestTargetFileName();
+    void initUi();
     void updateUi();
     bool hasGuetzliPlugin();
     void openImage(const QString &filePath);
+    QImage createCheckeredBackground(const QSize &size, const QImage::Format &format);
 
-private  slots:
+private slots:
     // File menu
     void openImage();
     void saveImage();
@@ -53,6 +60,8 @@ private  slots:
     // Help menu
     void aboutQt();
     void showPluginInfo();
+
+    void updateImagePreview();
 };
 
 #endif // MAINWINDOW_H
