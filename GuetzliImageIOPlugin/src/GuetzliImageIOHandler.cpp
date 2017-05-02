@@ -164,7 +164,7 @@ void GuetzliImageIOHandler::fetchRGB(const QImage &image, std::vector<uint8_t> *
     const int size = image.width() * image.height();
     uint8_t *rgbp = &(*rgb)[0];
     switch(image.format()) {
-    case QImage::Format_ARGB32:
+    case QImage::Format::Format_ARGB32:
 
         for (int i = 0; i < size; i++) {
             // 0xAARRGGBB
@@ -180,7 +180,7 @@ void GuetzliImageIOHandler::fetchRGB(const QImage &image, std::vector<uint8_t> *
         }
         break;
 
-    case QImage::Format_ARGB32_Premultiplied:
+    case QImage::Format::Format_ARGB32_Premultiplied:
 
         for (int i = 0; i < size; i++) {
             // 0xAARRGGBB
@@ -197,8 +197,8 @@ void GuetzliImageIOHandler::fetchRGB(const QImage &image, std::vector<uint8_t> *
         break;
 
     default:
-        if (image.format() != QImage::Format_RGB888) {
-            rgbImage = image.convertToFormat(QImage::Format_RGB888);
+        if (image.format() != QImage::Format::Format_RGB888) {
+            rgbImage = image.convertToFormat(QImage::Format::Format_RGB888);
         } else {
             rgbImage = image;
         }

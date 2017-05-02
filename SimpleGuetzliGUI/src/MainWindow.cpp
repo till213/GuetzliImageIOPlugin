@@ -172,9 +172,9 @@ void MainWindow::openImageFromSourceFilePath()
     updateUi();
 }
 
-QImage MainWindow::createCheckeredBackground(const QSize &size, const QImage::Format &format)
+QImage MainWindow::createCheckeredBackground(const QSize &size)
 {
-    QImage image = QImage(size, format);
+    QImage image = QImage(size, QImage::Format::Format_ARGB32_Premultiplied);
     QRgb *d = reinterpret_cast<QRgb *>(image.bits());
     for (int y = 0; y < image.height(); ++y) {
         for (int x = 0; x < image.width(); ++x) {
@@ -287,7 +287,7 @@ void MainWindow::updateBlendPreview(bool blend)
     QImage blendPreviewImage;
     if (m_previewImage.hasAlphaChannel()) {
         if (blend) {
-            blendPreviewImage = QImage(m_previewImage.size(), m_previewImage.format());
+            blendPreviewImage = QImage(m_previewImage.size(), QImage::Format::Format_ARGB32_Premultiplied);
 
 #if !defined(GUETZLI_BLEND_MODE) || (GUETZLI_BLEND_MODE == 1)
             blendPreviewImage.fill(Qt::black);
@@ -314,7 +314,7 @@ void MainWindow::updateBlendPreview(bool blend)
 #error "Unsupported blend mode - see DEFINES in Common.pri"
 #endif
         } else {
-            blendPreviewImage = createCheckeredBackground(m_previewImage.size(), m_previewImage.format());
+            blendPreviewImage = createCheckeredBackground(m_previewImage.size());
             QPainter painter(&blendPreviewImage);
             painter.drawImage(0, 0, m_previewImage);
             painter.end();
