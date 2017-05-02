@@ -172,27 +172,31 @@ void MainWindow::openImageFromSourceFilePath()
     updateUi();
 }
 
-QImage MainWindow::createCheckeredBackground(const QSize &size)
+QImage MainWindow::createCheckeredBackgroundImage(const QSize &size)
 {
-    QImage image = QImage(size, QImage::Format::Format_ARGB32_Premultiplied);
-    QRgb *d = reinterpret_cast<QRgb *>(image.bits());
-    for (int y = 0; y < image.height(); ++y) {
-        for (int x = 0; x < image.width(); ++x) {
-            QRgb gray;
-            if ((x % 16 < 8) && (y % 16 < 8)) {
-                gray = 0xff999999;
-            } else if ((x % 16 >= 8) && (y % 16 < 8)) {
-                gray = 0xff666666;
+    static QImage checkeredBackgroundImage;
+
+    if (checkeredBackgroundImage.isNull() || checkeredBackgroundImage.size() != size) {
+        checkeredBackgroundImage = QImage(size, QImage::Format::Format_ARGB32_Premultiplied);
+        QRgb *d = reinterpret_cast<QRgb *>(checkeredBackgroundImage.bits());
+        for (int y = 0; y < checkeredBackgroundImage.height(); ++y) {
+            for (int x = 0; x < checkeredBackgroundImage.width(); ++x) {
+                QRgb gray;
+                if ((x % 16 < 8) && (y % 16 < 8)) {
+                    gray = 0xff999999;
+                } else if ((x % 16 >= 8) && (y % 16 < 8)) {
+                    gray = 0xff666666;
+                }
+                else if ((x % 16 < 8) && (y % 16 >= 8)) {
+                    gray = 0xff666666;
+                } else {
+                    gray = 0xff999999;
+                }
+                *d++ = gray;
             }
-            else if ((x % 16 < 8) && (y % 16 >= 8)) {
-                gray = 0xff666666;
-            } else {
-                gray = 0xff999999;
-            }
-            *d++ = gray;
         }
     }
-    return image;
+    return checkeredBackgroundImage;
 }
 
 // Private slots
@@ -296,7 +300,7 @@ void MainWindow::updateBlendPreview(bool blend)
             painter.end();
 #elif (GUETZLI_BLEND_MODE == 2)
             blendPreviewImage.fill(Qt::white);
-            QPainter painter(&alphaPreviewImage);
+            QPainter painter(&blendPreviewImage);
             painter.drawImage(0, 0, m_previewImage);
             painter.end();
 #elif (GUETZLI_BLEND_MODE == 3)
@@ -314,7 +318,7 @@ void MainWindow::updateBlendPreview(bool blend)
 #error "Unsupported blend mode - see DEFINES in Common.pri"
 #endif
         } else {
-            blendPreviewImage = createCheckeredBackground(m_previewImage.size());
+            blendPreviewImage = createCheckeredBackgroundImage(m_previewImage.size());
             QPainter painter(&blendPreviewImage);
             painter.drawImage(0, 0, m_previewImage);
             painter.end();

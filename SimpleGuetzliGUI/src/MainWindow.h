@@ -50,7 +50,7 @@ private:
     void updateUi();
     bool hasGuetzliPlugin() const;
     void openImageFromSourceFilePath();
-    static QImage createCheckeredBackground(const QSize &size);
+    static QImage createCheckeredBackgroundImage(const QSize &size);
 
 private slots:
     // File menu
