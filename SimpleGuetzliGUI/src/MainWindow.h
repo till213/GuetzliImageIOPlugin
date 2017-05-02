@@ -38,19 +38,19 @@ private:
     QString m_sourceFilePath;
     QByteArray m_sourceFormat;
     QString m_targetFilePath;
-    QImage m_image;
+    QImage m_sourceImage;
+    QImage m_previewImage;
     qint64 m_elapsed;
 
     static const QString &BlackText;
     static const QString &WhiteText;
     static const QString &IgnoreAlphaText;
 
-    QString suggestTargetFileName();
-    void initUi();
+    QString suggestTargetFileName() const;
     void updateUi();
-    bool hasGuetzliPlugin();
-    void openImage(const QString &filePath);
-    QImage createCheckeredBackground(const QSize &size, const QImage::Format &format);
+    bool hasGuetzliPlugin() const;
+    void openImageFromSourceFilePath();
+    static QImage createCheckeredBackground(const QSize &size, const QImage::Format &format);
 
 private slots:
     // File menu
@@ -58,10 +58,11 @@ private slots:
     void saveImage();
 
     // Help menu
-    void aboutQt();
+    void aboutQt() const;
     void showPluginInfo();
 
     void updateImagePreview();
+    void updateBlendPreview(bool blend);
 };
 
 #endif // MAINWINDOW_H

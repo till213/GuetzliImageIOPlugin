@@ -436,7 +436,7 @@
    <sender>previewBlendingAlphaCheckBox</sender>
    <signal>toggled(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>updateImagePreview()</slot>
+   <slot>updateBlendPreview(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>651</x>
@@ -455,5 +455,6 @@
   <slot>aboutQt()</slot>
   <slot>showPluginInfo()</slot>
   <slot>updateImagePreview()</slot>
+  <slot>updateBlendPreview(bool)</slot>
  </slots>
 </ui>

@@ -68,7 +68,7 @@ void MainWindow::dropEvent(QDropEvent *event)
     const QMimeData *mimeData = event->mimeData();
     if(mimeData->hasUrls()) {
         m_sourceFilePath = mimeData->urls().first().toLocalFile();
-        openImage(m_sourceFilePath);
+        openImageFromSourceFilePath();
     }
 }
 
@@ -78,20 +78,15 @@ const QString &MainWindow::BlackText = tr("Black");
 const QString &MainWindow::WhiteText = tr("White");
 const QString &MainWindow::IgnoreAlphaText = tr("Ignore alpha");
 
-QString MainWindow::suggestTargetFileName()
+QString MainWindow::suggestTargetFileName() const
 {
     QString suggestedName = QFileInfo(m_sourceFilePath).baseName() + ".jpg";
     return suggestedName;
 }
 
-void MainWindow::initUi()
-{
-
-}
-
 void MainWindow::updateUi()
 {
-    bool enabled = !m_image.isNull();
+    bool enabled = !m_sourceImage.isNull();
     ui->saveAsAction->setEnabled(enabled);
     ui->saveButton->setEnabled(enabled);
 
@@ -105,9 +100,9 @@ void MainWindow::updateUi()
         ui->sourceSizeLabel->setText(QString());
         this->setWindowTitle(tr("Guetzli Simple GUI"));
     }
-    if (!m_image.isNull()) {
+    if (!m_sourceImage.isNull()) {
         ui->sourceFormatLabel->setText(QString(m_sourceFormat).toUpper());
-        bool hasAlpha = m_image.hasAlphaChannel();
+        bool hasAlpha = m_sourceImage.hasAlphaChannel();
         ui->hasAlphaCheckBox->setChecked(hasAlpha);
     } else {
         ui->sourceFormatLabel->setText(QString());
@@ -124,8 +119,8 @@ void MainWindow::updateUi()
         ui->targetSizeLabel->setText(QString());
         ui->durationLabel->setText(QString());
     }
-    if (!m_image.isNull()) {
-        bool hasAlpha = m_image.hasAlphaChannel();
+    if (!m_sourceImage.isNull()) {
+        bool hasAlpha = m_sourceImage.hasAlphaChannel();
         ui->previewBlendingAlphaCheckBox->setEnabled(hasAlpha);
         if (hasAlpha) {
 #if !defined(GUETZLI_BLEND_MODE) || (GUETZLI_BLEND_MODE == 1)
@@ -147,7 +142,7 @@ void MainWindow::updateUi()
     }
 }
 
-bool MainWindow::hasGuetzliPlugin()
+bool MainWindow::hasGuetzliPlugin() const
 {
     QList<QByteArray> supportedFormats = QImageWriter::supportedImageFormats();
     QByteArray guetzliFormat = QByteArray("guetzli");
@@ -164,12 +159,12 @@ bool MainWindow::hasGuetzliPlugin()
     return hasGuetzli;
 }
 
-void MainWindow::openImage(const QString &filePath)
+void MainWindow::openImageFromSourceFilePath()
 {
-    QImageReader imageReader(filePath);
+    QImageReader imageReader(m_sourceFilePath);
     m_sourceFormat = imageReader.format();
-    m_image = imageReader.read();
-    if (!m_image.isNull()) {
+    m_sourceImage = imageReader.read();
+    if (!m_sourceImage.isNull()) {
         updateImagePreview();
     } else {
         m_sourceFormat = "";
@@ -208,7 +203,7 @@ void MainWindow::openImage()
     m_sourceFilePath = QFileDialog::getOpenFileName(this, tr("Open"), m_lastSourceDirectory, filter);
     if (!m_sourceFilePath.isNull()) {
         m_lastSourceDirectory = QFileInfo(m_sourceFilePath).absolutePath();
-        openImage(m_sourceFilePath);
+        openImageFromSourceFilePath();
     }
 }
 
@@ -216,13 +211,13 @@ void MainWindow::saveImage()
 {
     QElapsedTimer elapsedTimer;
 
-    if (!m_image.isNull()) {
+    if (!m_sourceImage.isNull()) {
         QString filter("Guetzli (*.jpg)");
         QString filePath;
         if (m_targetFilePath.isEmpty()) {
-            filePath = m_lastSourceDirectory + "/" + this->suggestTargetFileName();
+            filePath = m_lastSourceDirectory + "/" + suggestTargetFileName();
         } else {
-            filePath = QFileInfo(m_targetFilePath).absolutePath() + "/" + this->suggestTargetFileName();
+            filePath = QFileInfo(m_targetFilePath).absolutePath() + "/" + suggestTargetFileName();
         }
         m_targetFilePath = QFileDialog::getSaveFileName(this, tr("Save"), filePath, filter);
         if (!m_targetFilePath.isNull()) {
@@ -241,7 +236,7 @@ void MainWindow::saveImage()
             QCoreApplication::processEvents();
 
             elapsedTimer.start();
-            bool success = imageWriter.write(m_image);
+            bool success = imageWriter.write(m_sourceImage);
             m_elapsed = elapsedTimer.elapsed();
             if (success) {
                 ui->statusBar->showMessage(tr("Guetzli ready."), 5000);
@@ -255,7 +250,7 @@ void MainWindow::saveImage()
     updateUi();
 }
 
-void MainWindow::aboutQt()
+void MainWindow::aboutQt() const
 {
     QApplication::aboutQt();
 }
@@ -270,60 +265,60 @@ void MainWindow::showPluginInfo()
 
 void MainWindow::updateImagePreview()
 {
-    if (!m_image.isNull()) {
-
-        QImage previewImage;
-        if (m_image.width() > ui->imagePreviewLabel->maximumWidth() ||
-            m_image.height() > ui->imagePreviewLabel->maximumHeight()
+    if (!m_sourceImage.isNull()) {
+        if (m_sourceImage.width() > ui->imagePreviewLabel->maximumWidth() ||
+            m_sourceImage.height() > ui->imagePreviewLabel->maximumHeight()
            )
         {
-            if (m_image.width() > m_image.height()) {
-                previewImage = m_image.scaledToWidth(ui->imagePreviewLabel->maximumWidth(), Qt::TransformationMode::SmoothTransformation);
+            if (m_sourceImage.width() > m_sourceImage.height()) {
+                m_previewImage = m_sourceImage.scaledToWidth(ui->imagePreviewLabel->maximumWidth(), Qt::TransformationMode::SmoothTransformation);
             } else {
-                previewImage = m_image.scaledToHeight(ui->imagePreviewLabel->maximumHeight(), Qt::TransformationMode::SmoothTransformation);
+                m_previewImage = m_sourceImage.scaledToHeight(ui->imagePreviewLabel->maximumHeight(), Qt::TransformationMode::SmoothTransformation);
             }
         } else {
-            previewImage = m_image;
+            m_previewImage = m_sourceImage;
         }
-        if (previewImage.hasAlphaChannel()) {
-            if (ui->previewBlendingAlphaCheckBox->isChecked()) {
-                QImage alphaPreviewImage = QImage(previewImage.size(), previewImage.format());
-
-    #if !defined(GUETZLI_BLEND_MODE) || (GUETZLI_BLEND_MODE == 1)
-                alphaPreviewImage.fill(Qt::black);
-                QPainter painter(&alphaPreviewImage);
-                painter.drawImage(0, 0, previewImage);
-                painter.end();
-    #elif (GUETZLI_BLEND_MODE == 2)
-                backgroundImage.fill(Qt::white);
-                QPainter painter(&alphaPreviewImage);
-                painter.drawImage(0, 0, image);
-                painter.end();
-    #elif (GUETZLI_BLEND_MODE == 3)
-                const uchar *sp = previewImage.bits();
-                uchar *dp = alphaPreviewImage.bits();
-                for (int i = 0; i < image.byteCount() / 4; ++i) {
-                    *dp++ = *sp++; // blue
-                    *dp++ = *sp++; // green
-                    *dp++ = *sp++; // red
-                    *dp++ = 0xff; // opaque alpha
-                    // ignore source alpha
-                    sp++;
-                }
-    #else
-    #error "Unsupported blend mode - see DEFINES in Common.pri"
-    #endif
-                previewImage = alphaPreviewImage;
-            } else {
-                QImage alphaPreviewImage = createCheckeredBackground(previewImage.size(), previewImage.format());
-                QPainter painter(&alphaPreviewImage);
-                painter.drawImage(0, 0, previewImage);
-                painter.end();
-                previewImage = alphaPreviewImage;
-            }
-        }
-        ui->imagePreviewLabel->setPixmap(QPixmap::fromImage(previewImage));
+        updateBlendPreview(ui->previewBlendingAlphaCheckBox->isChecked());
     }
 }
 
+void MainWindow::updateBlendPreview(bool blend)
+{
+    QImage blendPreviewImage;
+    if (m_previewImage.hasAlphaChannel()) {
+        if (blend) {
+            blendPreviewImage = QImage(m_previewImage.size(), m_previewImage.format());
 
+#if !defined(GUETZLI_BLEND_MODE) || (GUETZLI_BLEND_MODE == 1)
+            blendPreviewImage.fill(Qt::black);
+            QPainter painter(&blendPreviewImage);
+            painter.drawImage(0, 0, m_previewImage);
+            painter.end();
+#elif (GUETZLI_BLEND_MODE == 2)
+            blendPreviewImage.fill(Qt::white);
+            QPainter painter(&alphaPreviewImage);
+            painter.drawImage(0, 0, m_previewImage);
+            painter.end();
+#elif (GUETZLI_BLEND_MODE == 3)
+            const uchar *sp = m_previewImage.bits();
+            uchar *dp = blendPreviewImage.bits();
+            for (int i = 0; i < m_previewImage.byteCount() / 4; ++i) {
+                *dp++ = *sp++; // blue
+                *dp++ = *sp++; // green
+                *dp++ = *sp++; // red
+                *dp++ = 0xff; // opaque alpha
+                // ignore source alpha
+                sp++;
+            }
+#else
+#error "Unsupported blend mode - see DEFINES in Common.pri"
+#endif
+        } else {
+            blendPreviewImage = createCheckeredBackground(m_previewImage.size(), m_previewImage.format());
+            QPainter painter(&blendPreviewImage);
+            painter.drawImage(0, 0, m_previewImage);
+            painter.end();
+        }
+    }
+    ui->imagePreviewLabel->setPixmap(QPixmap::fromImage(blendPreviewImage));
+}
