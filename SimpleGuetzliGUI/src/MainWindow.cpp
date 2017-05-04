@@ -15,6 +15,7 @@
 #include <QDropEvent>
 #include <QMimeData>
 #include <QPainter>
+#include <QIcon>
 
 #include "PluginInfoDialog.h"
 #include "MainWindow.h"
@@ -32,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     if (standardLocations.size() > 0) {
         m_lastSourceDirectory = standardLocations[0];
     }
+    initUi();
     updateUi();
 
     if (!hasGuetzliPlugin()) {
@@ -41,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete m_checkedPixmap;
+    delete m_uncheckedPixmap;
     delete ui;
     if (m_pluginInfoDialog != nullptr) {
         delete m_pluginInfoDialog;
@@ -55,12 +59,14 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event)
     const QMimeData *mimeData = event->mimeData();
     if(mimeData->hasUrls()) {
         event->accept();
+        ui->imagePreviewLabel->setStyleSheet("border: 2qpx solid black");
     }
 }
 
 void MainWindow::dragLeaveEvent(QDragLeaveEvent *event)
 {
     Q_UNUSED(event);
+    ui->imagePreviewLabel->setStyleSheet("border: 1px solid black");
 }
 
 void MainWindow::dropEvent(QDropEvent *event)
@@ -70,6 +76,7 @@ void MainWindow::dropEvent(QDropEvent *event)
         m_sourceFilePath = mimeData->urls().first().toLocalFile();
         openImageFromSourceFilePath();
     }
+    ui->imagePreviewLabel->setStyleSheet("border: 1px solid black");
 }
 
 // Private
@@ -82,6 +89,12 @@ QString MainWindow::suggestTargetFileName() const
 {
     QString suggestedName = QFileInfo(m_sourceFilePath).baseName() + ".jpg";
     return suggestedName;
+}
+
+void MainWindow::initUi()
+{
+    m_checkedPixmap = new QPixmap(":/img/CheckboxChecked16x16.png/");
+    m_uncheckedPixmap = new QPixmap(":/img/CheckboxUnchecked16x16.png/");
 }
 
 void MainWindow::updateUi()
@@ -103,10 +116,14 @@ void MainWindow::updateUi()
     if (!m_sourceImage.isNull()) {
         ui->sourceFormatLabel->setText(QString(m_sourceFormat).toUpper());
         bool hasAlpha = m_sourceImage.hasAlphaChannel();
-        ui->hasAlphaCheckBox->setChecked(hasAlpha);
+        if (hasAlpha) {
+            ui->hasAlphaLabel->setPixmap(*m_checkedPixmap);
+        } else {
+            ui->hasAlphaLabel->setPixmap(*m_uncheckedPixmap);
+        }
     } else {
         ui->sourceFormatLabel->setText(QString());
-        ui->hasAlphaCheckBox->setChecked(false);
+        ui->hasAlphaLabel->setPixmap(*m_uncheckedPixmap);
     }
 
     // Target file (guetzli)
@@ -323,6 +340,8 @@ void MainWindow::updateBlendPreview(bool blend)
             painter.drawImage(0, 0, m_previewImage);
             painter.end();
         }
+    } else {
+        blendPreviewImage = m_previewImage;
     }
     ui->imagePreviewLabel->setPixmap(QPixmap::fromImage(blendPreviewImage));
 }

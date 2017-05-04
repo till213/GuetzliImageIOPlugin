@@ -29,4 +29,7 @@ macx {
 OTHER_FILES += res/GuetzliIcon.xcf \
                res/GuetzliIcon.ico
 
+RESOURCES += \
+    res/SimpleGuetzliGUIResources.qrc
+
 

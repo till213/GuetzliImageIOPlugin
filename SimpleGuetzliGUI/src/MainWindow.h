@@ -12,6 +12,7 @@ class PluginInfoDialog;
 class QDragEnterEvent;
 class QDragLeaveEvent;
 class QSize;
+class QPixmap;
 
 namespace Ui {
 class MainWindow;
@@ -41,12 +42,15 @@ private:
     QImage m_sourceImage;
     QImage m_previewImage;
     qint64 m_elapsed;
+    QPixmap *m_checkedPixmap;
+    QPixmap *m_uncheckedPixmap;
 
     static const QString &BlackText;
     static const QString &WhiteText;
     static const QString &IgnoreAlphaText;
 
     QString suggestTargetFileName() const;
+    void initUi();
     void updateUi();
     bool hasGuetzliPlugin() const;
     void openImageFromSourceFilePath();
