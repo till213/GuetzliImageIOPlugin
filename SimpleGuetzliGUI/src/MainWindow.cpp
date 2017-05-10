@@ -221,8 +221,9 @@ QImage MainWindow::createCheckeredBackgroundImage(const QSize &size)
 void MainWindow::openImage()
 {
     QString filter(tr("Images (*.png *.tif *.tiff *.jpg *.jpeg);;PNG (*.png);;TIFF (*.tif *.tiff);; JPEG (*.jpg *.jpeg)"));
-    m_sourceFilePath = QFileDialog::getOpenFileName(this, tr("Open"), m_lastSourceDirectory, filter);
-    if (!m_sourceFilePath.isNull()) {
+    QString sourceFilePath = QFileDialog::getOpenFileName(this, tr("Open"), m_lastSourceDirectory, filter);
+    if (!sourceFilePath.isNull()) {
+        m_sourceFilePath = sourceFilePath;
         m_lastSourceDirectory = QFileInfo(m_sourceFilePath).absolutePath();
         openImageFromSourceFilePath();
     }
