@@ -89,7 +89,6 @@ bool GuetzliImageIOHandler::write(const QImage &image)
 
     std::string outData;
     if (!guetzli::Process(params, &stats, rgb, image.width(), image.height(), &outData)) {
-      fprintf(stderr, "Guetzli processing failed\n");
       return false;
     }
 
@@ -156,9 +155,6 @@ void GuetzliImageIOHandler::fetchRGB(const QImage &image, std::vector<uint8_t> *
 {
     rgb->resize(3 * image.width() * image.height());
 
-    // @todo Treat each format (that we want to support) individually - here we go the Cheap Way(tm)
-    // by making sure that the image format is RGB, 8 bit per channel
-
     QImage rgbImage;
     const uint8_t *bits = image.bits();
     const int size = image.width() * image.height();
@@ -205,11 +201,9 @@ void GuetzliImageIOHandler::fetchRGB(const QImage &image, std::vector<uint8_t> *
 
         // RGB
         for (int y = 0; y < rgbImage.height(); ++y) {
-
             const uint8_t *row_in = rgbImage.scanLine(y);
             uint8_t *row_out = &(*rgb)[3 * y * rgbImage.width()];
             memcpy(row_out, row_in, 3 * rgbImage.width());
-
         }
         break;
     }
