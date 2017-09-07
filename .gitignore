@@ -8,7 +8,6 @@ Makefile*
 *.dll
 *.so
 Doxydoc
-obj
 
 # Qt build
 ui_*.h
@@ -16,7 +15,9 @@ qrc_*.cpp
 moc_*.cpp
 GeneratedFiles
 bin
+object
 dist
+lib
 
 # Qt Creator
 *.pro.user*

@@ -6,16 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
-    <height>457</height>
+    <width>740</width>
+    <height>481</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Simple GuetzliGUI</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="4">
+    <item row="0" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QLabel" name="imagePreviewLabel">
@@ -90,12 +90,12 @@
            <item row="2" column="0">
             <widget class="QLabel" name="label_6">
              <property name="text">
-              <string>Gamma:</string>
+              <string>Has Alpha:</string>
              </property>
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QLabel" name="sourceGammaLabel">
+            <widget class="QLabel" name="hasAlphaLabel">
              <property name="text">
               <string/>
              </property>
@@ -136,31 +136,52 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item row="4" column="0">
             <widget class="QLabel" name="label_3">
              <property name="text">
               <string>Size [KB]:</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
+           <item row="4" column="1">
             <widget class="QLabel" name="targetSizeLabel">
              <property name="text">
               <string/>
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
+           <item row="5" column="0">
             <widget class="QLabel" name="label_5">
              <property name="text">
               <string>Duration [sec]:</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
+           <item row="5" column="1">
             <widget class="QLabel" name="durationLabel">
              <property name="text">
               <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>Background:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLabel" name="backgroundLabel">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QCheckBox" name="previewBlendingAlphaCheckBox">
+             <property name="text">
+              <string>Preview &amp;Blending</string>
              </property>
             </widget>
            </item>
@@ -172,39 +193,6 @@
      </layout>
     </item>
     <item row="1" column="0">
-     <widget class="QPushButton" name="openButton">
-      <property name="toolTip">
-       <string>Open image</string>
-      </property>
-      <property name="text">
-       <string>&amp;Open...</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QPushButton" name="saveButton">
-      <property name="toolTip">
-       <string>Save as guetzli image</string>
-      </property>
-      <property name="text">
-       <string>Save &amp;As...</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="2">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>487</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="1" column="3">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -217,6 +205,43 @@
       </property>
      </spacer>
     </item>
+    <item row="2" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QPushButton" name="openButton">
+        <property name="toolTip">
+         <string>Open image</string>
+        </property>
+        <property name="text">
+         <string>&amp;Open...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="saveButton">
+        <property name="toolTip">
+         <string>Save as guetzli image</string>
+        </property>
+        <property name="text">
+         <string>Save &amp;As...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>487</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -224,8 +249,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>700</width>
-     <height>22</height>
+     <width>740</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -237,7 +262,15 @@
     <addaction name="separator"/>
     <addaction name="quitAction"/>
    </widget>
+   <widget class="QMenu" name="menu_About">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="aboutQtAction"/>
+    <addaction name="showPluginInfoAction"/>
+   </widget>
    <addaction name="fileMenu"/>
+   <addaction name="menu_About"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="openAction">
@@ -268,6 +301,16 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="aboutQtAction">
+   <property name="text">
+    <string>About &amp;Qt</string>
+   </property>
+  </action>
+  <action name="showPluginInfoAction">
+   <property name="text">
+    <string>&amp;Plugins...</string>
    </property>
   </action>
  </widget>
@@ -354,9 +397,61 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>aboutQtAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>aboutQt()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>324</x>
+     <y>228</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>showPluginInfoAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showPluginInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>324</x>
+     <y>228</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>previewBlendingAlphaCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>updateBlendPreview(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>651</x>
+     <y>198</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>369</x>
+     <y>240</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openImage()</slot>
   <slot>saveImage()</slot>
+  <slot>aboutQt()</slot>
+  <slot>showPluginInfo()</slot>
+  <slot>updateImagePreview()</slot>
+  <slot>updateBlendPreview(bool)</slot>
  </slots>
 </ui>

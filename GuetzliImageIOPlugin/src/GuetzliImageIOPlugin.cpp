@@ -16,7 +16,10 @@ GuetzliImageIOPlugin::Capabilities GuetzliImageIOPlugin::capabilities(QIODevice 
 {
     Q_UNUSED(device)
 
-    if (format == "jpeg" || format == "jpg" || format == "guetzli") {
+    // Note: even though the Guetzli encoder writes perfectly valid JPEG images we do not "register" it
+    //       as such (format "jpg" or "jpeg"), because we would "hide" (depending on the plugin loading
+    //       order) the actual Qt JPEG plugin
+    if (format == "guetzli") {
         return Capability::CanWrite;
     } else {
         return 0;
@@ -34,8 +37,5 @@ QImageIOHandler *GuetzliImageIOPlugin::create(QIODevice *device, const QByteArra
     guetzliImageIOHandler->setFormat("guetzli");
     guetzliImageIOHandler->setDevice(device);
 
-
-
     return guetzliImageIOHandler;
-
 }

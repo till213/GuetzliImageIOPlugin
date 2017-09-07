@@ -1,42 +1,32 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2017-03-20T08:18:38
-#
-#-------------------------------------------------
-
+include(../Common.pri)
 include(Sources.pri)
 
+QT += core gui
 
-QT       += core gui
+TARGET       = GuetzliImageIOPlugin
+TEMPLATE     = lib
+CONFIG      += plugin
+INCLUDEPATH += $$PWD/../GuetzliLib/guetzli $$PWD/../GuetzliLib/guetzli/third_party/butteraugli
 
-TARGET = GuetzliIOPlugin
-TEMPLATE = lib
-CONFIG += plugin c++11
-
-DESTDIR = $$[QT_INSTALL_PLUGINS]/imageformats
-
-INCLUDEPATH = $$PWD/../GuetzliLib/guetzli $$PWD/../GuetzliLib/guetzli/third_party/butteraugli
-
+# Use the environment variable QT_DEBUG_PLUGINS to debug plugin loading
+# e.g. export QT_DEBUG_PLUGINS=1
 CONFIG(debug, debug|release) {
-    OBJECTS_DIR    = obj/debug
-    MOC_DIR        = GeneratedFiles/debug
-    UI_DIR         = GeneratedFiles/debug
-    INCLUDEPATH   += GeneratedFiles/debug
+    LIBS   += -L$$PWD/../lib/debug -lGuetzliLib
+    macos {
+        DESTDIR = $$PWD/../bin/debug/$${APP_NAME}.app/Contents/plugins/imageformats
+    } else {
+        DESTDIR = $$PWD/../bin/debug/imageformats
+    }
 } else {
-    OBJECTS_DIR    = obj/release
-    MOC_DIR        = GeneratedFiles/release
-    UI_DIR         = GeneratedFiles/release
-    INCLUDEPATH   += GeneratedFiles/release
+    LIBS   += -L$$PWD/../lib/release -lGuetzliLib
+    macos {
+        DESTDIR = $$PWD/../bin/release/$${APP_NAME}.app/Contents/plugins/imageformats
+    } else {
+        DESTDIR = $$PWD/../bin/release/imageformats
+    }
 }
 
-CONFIG(debug, debug|release) {
-    LIBS += -L$$PWD/../bin/debug -lGuetzliLib
-} else {
-    LIBS += -L$$PWD/../bin/release -lGuetzliLib
-}
-
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
+# Installation
+target.path = $$[QT_INSTALL_PLUGINS]/imageformats
+INSTALLS += target
 
