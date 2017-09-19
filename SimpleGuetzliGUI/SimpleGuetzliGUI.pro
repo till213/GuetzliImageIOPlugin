@@ -24,12 +24,16 @@ macx {
     QMAKE_EXTRA_TARGETS += iconset
     PRE_TARGETDEPS += iconset
     ICON = $$PWD/res/GuetzliIcon.icns
+    QMAKE_INFO_PLIST = $$PWD/Info.plist
+
+    OTHER_FILES += $$PWD/Info.plist \
+                   $$PWD/res/GuetzliIcon.icns
 }
 
 OTHER_FILES += res/GuetzliIcon.xcf \
                res/GuetzliIcon.ico
 
-RESOURCES += \
-    res/SimpleGuetzliGUIResources.qrc
+RESOURCES += res/SimpleGuetzliGUIResources.qrc
+
 
 

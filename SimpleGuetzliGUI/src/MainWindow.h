@@ -6,13 +6,13 @@
 #include <QByteArray>
 #include <QImage>
 #include <QColor>
+#include <QIcon>
 
 class QWidget;
 class PluginInfoDialog;
 class QDragEnterEvent;
 class QDragLeaveEvent;
 class QSize;
-class QPixmap;
 
 namespace Ui {
 class MainWindow;
@@ -42,8 +42,8 @@ private:
     QImage m_sourceImage;
     QImage m_previewImage;
     qint64 m_elapsed;
-    QPixmap *m_checkedPixmap;
-    QPixmap *m_uncheckedPixmap;
+    QIcon m_checkedIcon;
+    QIcon m_uncheckedIcon;
 
     static const QString &BlackText;
     static const QString &WhiteText;
