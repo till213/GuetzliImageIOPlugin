@@ -11,7 +11,7 @@ TEMPLATE = app
 QMAKE_TARGET_COMPANY=till-art.net
 QMAKE_TARGET_DESCRIPTION="Simple GUI for the guetzli encoder"
 QMAKE_TARGET_PRODUCT="Simple GuetzliGUI"
-VERSION=0.1
+VERSION=0.1.0
 
 # Application icon
 win32 {
