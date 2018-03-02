@@ -35,3 +35,7 @@ CONFIG(debug, debug|release) {
     DESTDIR = $$PWD/bin/release
     message(Building $$TARGET in release mode)
 }
+
+macx {
+    QMAKE_MAC_SDK = macosx10.13
+}
