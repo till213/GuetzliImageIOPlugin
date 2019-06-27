@@ -37,5 +37,6 @@ CONFIG(debug, debug|release) {
 }
 
 macx {
-    QMAKE_MAC_SDK = macosx10.13
+    # XCode 10 (Mojave)
+    QMAKE_MAC_SDK = macosx10.14
 }

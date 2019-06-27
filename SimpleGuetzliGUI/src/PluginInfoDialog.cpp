@@ -53,7 +53,7 @@ void PluginInfoDialog::initUi()
     QList<QByteArray> supportedImageFormats = QImageReader::supportedImageFormats();
     for (QByteArray supportedImageFormat : supportedImageFormats) {
         item = new QTableWidgetItem(QString(supportedImageFormat).toUpper());
-        item->setFlags(item->flags()^= Qt::ItemIsEditable);
+        item->setFlags(item->flags() ^= Qt::ItemIsEditable);
         int currentRowCount = ui->pluginTableWidget->rowCount();
         ui->pluginTableWidget->insertRow(currentRowCount);
         ui->pluginTableWidget->setItem(currentRowCount, ::FormatColumn, item);
