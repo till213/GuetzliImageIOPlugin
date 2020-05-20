@@ -5,6 +5,8 @@ SOURCES += $$PWD/src/main.cpp \
            $$PWD/src/MainWindow.cpp \
            $$PWD/src/PluginInfoDialog.cpp \
            $$PWD/src/Version.cpp
+           # TODO FIXME Proper source generation
+           # $$PWD/src/generated_Version.cpp
 HEADERS += $$PWD/src/MainWindow.h \
            $$PWD/src/PluginInfoDialog.h \
            $$PWD/src/Version.h

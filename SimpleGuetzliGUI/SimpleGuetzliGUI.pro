@@ -24,6 +24,10 @@ macx {
     QMAKE_EXTRA_TARGETS += iconset
     PRE_TARGETDEPS += iconset
     ICON = $$PWD/res/GuetzliIcon.icns
+    QMAKE_INFO_PLIST = $$PWD/Info.plist
+
+    OTHER_FILES += $$PWD/Info.plist \
+                   $$PWD/res/GuetzliIcon.icns
 }
 
 OTHER_FILES += res/GuetzliIcon.xcf \
@@ -33,10 +37,9 @@ RESOURCES += res/SimpleGuetzliGUIResources.qrc
 
 version.target = src/generated_Version.cpp
 message(Creating version...)
+#TODO FIXME How to get a proper #include statement
 version.commands = @echo \"$$LITERAL_HASH include \\\"Version.h\\\"\" > \"$$PWD/src/generated_Version.cpp\"
 version.depends = FORCE
 
 QMAKE_EXTRA_TARGETS += version
 PRE_TARGETDEPS += src/generated_Version.cpp
-
-

@@ -43,8 +43,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete m_checkedPixmap;
-    delete m_uncheckedPixmap;
     delete ui;
     if (m_pluginInfoDialog != nullptr) {
         delete m_pluginInfoDialog;
@@ -93,12 +91,14 @@ QString MainWindow::suggestTargetFileName() const
 
 void MainWindow::initUi()
 {
-    m_checkedPixmap = new QPixmap(":/img/CheckboxChecked16x16.png/");
-    m_uncheckedPixmap = new QPixmap(":/img/CheckboxUnchecked16x16.png/");
+    // The @2x variants are added automagically
+    m_checkedIcon.addFile(":/img/CheckboxChecked16x16.png/");
+    m_uncheckedIcon.addFile(":/img/CheckboxUnchecked16x16.png/");
 }
 
 void MainWindow::updateUi()
 {
+    const QSize LabelSize = QSize(16, 16);
     bool enabled = !m_sourceImage.isNull();
     ui->saveAsAction->setEnabled(enabled);
     ui->saveButton->setEnabled(enabled);
@@ -117,13 +117,13 @@ void MainWindow::updateUi()
         ui->sourceFormatLabel->setText(QString(m_sourceFormat).toUpper());
         bool hasAlpha = m_sourceImage.hasAlphaChannel();
         if (hasAlpha) {
-            ui->hasAlphaLabel->setPixmap(*m_checkedPixmap);
+            ui->hasAlphaLabel->setPixmap(m_checkedIcon.pixmap(LabelSize));
         } else {
-            ui->hasAlphaLabel->setPixmap(*m_uncheckedPixmap);
+            ui->hasAlphaLabel->setPixmap(m_uncheckedIcon.pixmap(LabelSize));
         }
     } else {
         ui->sourceFormatLabel->setText(QString());
-        ui->hasAlphaLabel->setPixmap(*m_uncheckedPixmap);
+        ui->hasAlphaLabel->setPixmap(m_uncheckedIcon.pixmap(LabelSize));
     }
 
     // Target file (guetzli)

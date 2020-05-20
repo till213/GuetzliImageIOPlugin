@@ -118,5 +118,3 @@ QString Version::getApplicationVersion()
     Version version;
     return version.toString();
 }
-
-
