@@ -10,8 +10,8 @@ TEMPLATE = app
 
 QMAKE_TARGET_COMPANY=till-art.net
 QMAKE_TARGET_DESCRIPTION="Simple GUI for the guetzli encoder"
-QMAKE_TARGET_PRODUCT="Simple GuetzliGUI"
-VERSION=0.1
+QMAKE_TARGET_PRODUCT="Simple Guetzli GUI"
+VERSION=0.9.0
 
 # Application icon
 win32 {
@@ -29,7 +29,14 @@ macx {
 OTHER_FILES += res/GuetzliIcon.xcf \
                res/GuetzliIcon.ico
 
-RESOURCES += \
-    res/SimpleGuetzliGUIResources.qrc
+RESOURCES += res/SimpleGuetzliGUIResources.qrc
+
+version.target = src/generated_Version.cpp
+message(Creating version...)
+version.commands = @echo \"$$LITERAL_HASH include \\\"Version.h\\\"\" > \"$$PWD/src/generated_Version.cpp\"
+version.depends = FORCE
+
+QMAKE_EXTRA_TARGETS += version
+PRE_TARGETDEPS += src/generated_Version.cpp
 
 
