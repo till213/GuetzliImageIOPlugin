@@ -18,8 +18,8 @@ public:
     int minorNo;
     int subMinorNo;
 
-    static constexpr int MajorNo = 0;
-    static constexpr int MinorNo = 9;
+    static constexpr int MajorNo = 1;
+    static constexpr int MinorNo = 0;
     static constexpr int SubMinorNo = 0;
     static const QString CodeName;
     static const QDate BuildDate;

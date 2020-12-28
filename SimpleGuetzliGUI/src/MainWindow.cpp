@@ -166,7 +166,7 @@ bool MainWindow::hasGuetzliPlugin() const
     bool hasGuetzli;
 
     hasGuetzli = false;
-    for (QByteArray format : supportedFormats) {
+    for (QByteArray &format : supportedFormats) {
         if (guetzliFormat == format) {
             hasGuetzli = true;
             break;
@@ -254,7 +254,7 @@ void MainWindow::saveImage()
             ui->statusBar->showMessage(tr("Baking guetzli..."));
 
             // Make sure that the file dialog gets a chance (event) to close
-            // (Specifically on macOS)
+            // (specifically on macOS)
             QCoreApplication::processEvents();
 
             elapsedTimer.start();

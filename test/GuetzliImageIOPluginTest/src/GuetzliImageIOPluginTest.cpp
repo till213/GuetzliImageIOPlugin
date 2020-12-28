@@ -191,9 +191,12 @@ bool GuetzliImageIOPluginTest::compareImages(const QImage &actualImage, const QI
     float mseAlpha;
     // Heuristically evaluated threshold such that small size, low quality (q=84)
     // guetzli images still pass the test:
-    // Quality 84: Threshold 100.0f
-    // Quality 100: Threshold 45.0f
-    const float MseThreshold = 100.0f - (55.0f - 55.0f * (1.0f - ((quality - 84.0f) / 16.0f)));
+    // Quality 84: Threshold 150
+    // Quality 100: Threshold 105
+    // Note: the guetzli encoder seems to reduce red tones (or increase blue tones), resulting
+    //       in a somewhat (red channel) desaturated, blue-ish look (specifically for the
+    //       "Los Angeles" test photo, hence the somewhat generous threshold
+    const float MseThreshold = 150.0f - (55.0f - 55.0f * (1.0f - ((quality - 84.0f) / 16.0f)));
 
     mseRed = mseGreen = mseBlue = mseAlpha = 0.0f;
     for (int y = 0; y < actualImage.height(); ++y) {
@@ -390,7 +393,7 @@ void GuetzliImageIOPluginTest::checkGuetzliPlugin()
     bool hasGuetzliFormat = false;
 
     // Exercise
-    for (QByteArray format : formats) {
+    for (QByteArray &format : formats) {
         if (format == "guetzli") {
             hasGuetzliFormat = true;
             break;
@@ -457,7 +460,7 @@ void GuetzliImageIOPluginTest::compareWithReference()
     actualImage.loadFromData(buffer.data(), "jpg");
     buffer.close();
 
-    if (WriteImagesToDisk) {
+    if (::WriteImagesToDisk) {
         sourceImage.save(QString(QTest::currentDataTag()) + "-source.png", "PNG");
         actualImage.save(QString(QTest::currentDataTag()) + "-actual.png", "PNG");
         expectedImage.save(QString(QTest::currentDataTag()) + "-expect.png", "PNG");

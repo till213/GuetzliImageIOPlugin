@@ -51,7 +51,7 @@ void PluginInfoDialog::initUi()
 
     // Readers
     QList<QByteArray> supportedImageFormats = QImageReader::supportedImageFormats();
-    for (QByteArray supportedImageFormat : supportedImageFormats) {
+    for (QByteArray &supportedImageFormat : supportedImageFormats) {
         item = new QTableWidgetItem(QString(supportedImageFormat).toUpper());
         item->setFlags(item->flags() ^= Qt::ItemIsEditable);
         int currentRowCount = ui->pluginTableWidget->rowCount();
@@ -64,7 +64,7 @@ void PluginInfoDialog::initUi()
 
     // Writers
     supportedImageFormats = QImageWriter::supportedImageFormats();
-    for (QByteArray supportedImageFormat : supportedImageFormats) {
+    for (QByteArray &supportedImageFormat : supportedImageFormats) {
         int row = findFormat(supportedImageFormat);
         if (row >= 0) {
             item = createCheckedReadOnlyItem();
@@ -85,7 +85,7 @@ void PluginInfoDialog::initUi()
 
     // Library paths
     QStringList libraryPaths = QCoreApplication::libraryPaths();
-    for (QString libraryPath : libraryPaths) {
+    for (QString &libraryPath : libraryPaths) {
         ui->pluginPathListWidget->addItem(QDir::toNativeSeparators(libraryPath));
     }
 }
@@ -172,7 +172,7 @@ QTableWidgetItem *PluginInfoDialog::createCheckedReadOnlyItem(const QString &tex
 {
     QTableWidgetItem *item = new QTableWidgetItem(text);
     item->setCheckState(Qt::CheckState::Checked);
-    item->setFlags(item->flags()^= Qt::ItemIsEditable | Qt::ItemIsUserCheckable);
+    item->setFlags(item->flags() ^= Qt::ItemIsEditable | Qt::ItemIsUserCheckable);
     return item;
 }
 

@@ -162,7 +162,7 @@ void GuetzliImageIOHandler::fetchRGB(const QImage &image, std::vector<uint8_t> *
     switch(image.format()) {
     case QImage::Format::Format_ARGB32:
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; ++i) {
             // 0xAARRGGBB
             uint8_t b = *bits++;
             uint8_t g = *bits++;
@@ -178,7 +178,7 @@ void GuetzliImageIOHandler::fetchRGB(const QImage &image, std::vector<uint8_t> *
 
     case QImage::Format::Format_ARGB32_Premultiplied:
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; ++i) {
             // 0xAARRGGBB
             uint8_t b = *bits++;
             uint8_t g = *bits++;
