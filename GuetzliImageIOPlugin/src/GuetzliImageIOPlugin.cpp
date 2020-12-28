@@ -16,15 +16,15 @@ GuetzliImageIOPlugin::Capabilities GuetzliImageIOPlugin::capabilities(QIODevice 
 {
     Q_UNUSED(device)
 
+     QFlags<Capability> capabilities;
+
     // Note: even though the Guetzli encoder writes perfectly valid JPEG images we do not "register" it
     //       as such (format "jpg" or "jpeg"), because we would "hide" (depending on the plugin loading
     //       order) the actual Qt JPEG plugin
     if (format == "guetzli") {
-        return Capability::CanWrite;
-    } else {
-        return 0;
+        capabilities |= Capability::CanWrite;
     }
-
+    return capabilities;
 }
 
 QImageIOHandler *GuetzliImageIOPlugin::create(QIODevice *device, const QByteArray &format) const

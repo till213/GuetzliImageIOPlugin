@@ -5,6 +5,7 @@
 #include <QVector>
 #include <QPainter>
 #include <QImageWriter>
+#include <QOperatingSystemVersion>
 
 #include "GuetzliImageIOPluginTest.h"
 
@@ -354,7 +355,7 @@ void GuetzliImageIOPluginTest::createTestData(const QSize &size, int quality)
 
 void GuetzliImageIOPluginTest::initTestCase()
 {
-    if (QSysInfo::macVersion() != QSysInfo::MV_None) {
+    if (QOperatingSystemVersion::currentType() == QOperatingSystemVersion::MacOS) {
         // The guetzli plugin is in the SimpleGuetzliGUI application bundle
         QString applicationPluginDirectory = QCoreApplication::applicationDirPath() + "/SimpleGuetzliGUI.app/Contents/plugins";
         QCoreApplication::addLibraryPath(applicationPluginDirectory);

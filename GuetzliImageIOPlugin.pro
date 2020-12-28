@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
-SUBDIRS = SimpleGuetzliGUI GuetzliLib GuetzliImageIOPlugin GuetzliImageIOPluginTest  #Guetzli
+SUBDIRS = SimpleGuetzliGUI GuetzliLib GuetzliImageIOPlugin GuetzliImageIOPluginTest
 
 # Build the GUI first, in order to place the plugin into the application package (macOS)
 # later on
@@ -15,10 +15,6 @@ GuetzliImageIOPlugin.depends = GuetzliLib
 
 GuetzliImageIOPluginTest.subdir = test/GuetzliImageIOPluginTest
 GuetzliImageIOPluginTest.depends = GuetzliImageIOPlugin
-
-# Define PNG dependency first
-#Guetzli.subdir = Guetzli
-#Guetzli.depends = GuetzliLib
 
 OTHER_FILES += README.md \
                LICENSE

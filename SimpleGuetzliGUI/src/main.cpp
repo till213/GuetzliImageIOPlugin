@@ -1,5 +1,5 @@
 #include <QApplication>
-#include <QSysInfo>
+#include <QOperatingSystemVersion>
 #include <QString>
 
 #include "MainWindow.h"
@@ -10,7 +10,9 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     QApplication app(argc, argv);
-    if (QSysInfo::macVersion() != QSysInfo::MV_None) {
+    if (QOperatingSystemVersion::currentType() == QOperatingSystemVersion::MacOS) {
+        // On macOS the plugin directory is inside the application bundle, on the same
+        // directory level as the application directory
         QString applicationPluginDirectory = QCoreApplication::applicationDirPath() + "/../plugins";
         QCoreApplication::addLibraryPath(applicationPluginDirectory);
     }    
