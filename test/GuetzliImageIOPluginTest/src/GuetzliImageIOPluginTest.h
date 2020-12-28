@@ -6,6 +6,17 @@
 #include <QSize>
 #include <QVector>
 
+/*!
+ * Test cases for the Guetzli Qt image plugin.
+ *
+ * Note: even on a fast CPU (e.g. Intel Core i7 with 4.2 GHz) the tests may run longer
+ * than the default Qt test timeout (5 minutes respectively 60 seconds within Qt Creator).
+ * So either set the environment variable QTEST_FUNCTION_TIMEOUT (default: 300000 ms) to
+ * a higher value or - when the tests are run within Qt Creator - increase the timeout in the
+ * Qt Creator settings (default: 60 seconds).
+ *
+ * Also refer to https://doc.qt.io/qtcreator/creator-autotest.html#building-and-running-tests
+ */
 class GuetzliImageIOPluginTest : public QObject
 {
     Q_OBJECT
