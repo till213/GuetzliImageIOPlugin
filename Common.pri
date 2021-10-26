@@ -35,8 +35,3 @@ CONFIG(debug, debug|release) {
     DESTDIR = $$PWD/bin/release
     message(Building $$TARGET in release mode)
 }
-
-macx {
-    # XCode 10.3 (Mojave)
-    QMAKE_MAC_SDK = macosx10.15
-}
