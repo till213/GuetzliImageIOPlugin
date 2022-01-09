@@ -14,7 +14,7 @@ for easy use in [Qt](https://www.qt.io/) based applications.
 
 A simple GUI (__SimpleGuetzliGUI__) for testing the plugin is provided, too.
 
-![Simple GuetzliGUI](https://github.com/till213/GuetzliImageIOPlugin/raw/main/doc/img/simpleguetzligui.png "Simple GuetzliGUI on FreeBSD")
+![Simple GuetzliGUI](doc/img/simpleguetzligui.png "Simple GuetzliGUI on FreeBSD")
 
 # Cloning
 
