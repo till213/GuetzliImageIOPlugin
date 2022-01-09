@@ -194,7 +194,7 @@ This is a simple derivative work done in my free time. All credits go to Robert 
 
 The Qt plugin code is under the [LGPL 3](LICENSE).
 
-Note that the Google guetzli code comes with its own [Apache License 2.0](https://github.com/google/guetzli/blob/main/LICENSE).
+Note that the Google guetzli code comes with its own [Apache License 2.0](https://github.com/google/guetzli/blob/master/LICENSE).
 
 
 
